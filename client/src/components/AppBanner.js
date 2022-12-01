@@ -113,7 +113,10 @@ export default function AppBanner() {
             sx={{ flexGrow: 1 }}
             style={{ display: 'flex', flexDirection: 'column' }}
         >
-            <AppBar position="static">
+            <AppBar 
+            position="static"
+            style={{ backgroundColor: '#e3f2fd', borderRadius: '10px 10px 10px 10px' }}
+            >
                 <Toolbar>
                     <img
                         src="/playlister.png"
@@ -133,7 +136,7 @@ export default function AppBanner() {
                             aria-controls={menuId}
                             aria-haspopup="true"
                             onClick={handleProfileMenuOpen}
-                            color="inherit"
+                            color="#b1bfca"
                         >
                             {getAccountMenu(auth.loggedIn)}
                         </IconButton>

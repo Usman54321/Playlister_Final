@@ -21,7 +21,7 @@ export default function SplashScreen() {
                     {'Playlister'}
                 </Typography>
                 <Typography variant="h4"
-                    style={{ marginBottom: "20px", color: "black" }}>
+                    style={{ marginBottom: "25px", color: "black" }}>
                     {'An easy-to-use tool to manage your songs quickly and efficiently.'}
                 </Typography>
 
@@ -51,6 +51,6 @@ export default function SplashScreen() {
                     </Typography>
                 </Box>
             </Box>
-        </div>
+        </div >
     );
 }
