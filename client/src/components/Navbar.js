@@ -15,6 +15,24 @@ export default function Navbar() {
         store.setSortType(event.target.value);
     }
 
+    let sortOptions = <>
+        <option value="name">Name</option>
+        <option value="likes">Likes</option>
+        <option value="dislikes">Dislikes</option>
+        <option value="listens">Listens</option>
+    </>
+
+    if (store.currentPage === "HOME") {
+        sortOptions = <>
+            <option value="name">Name</option>
+            <option value="likes">Likes</option>
+            <option value="dislikes">Dislikes</option>
+            <option value="listens">Listens</option>
+            <option value="last_edited">Last Edited</option>
+            <option value="published">Published</option>
+        </>
+    }
+
     return (
         <Box
             sx={{
@@ -58,8 +76,11 @@ export default function Navbar() {
                     <PersonOutlineIcon />
                 </IconButton>
             </Box>
+
+
             <SearchBar />
 
+            {/* This box is for the Sort By Chunk */}
             <Box
                 sx={{
                     display: "flex",
@@ -83,15 +104,9 @@ export default function Navbar() {
                 >
                     <Select
                         native
-                        
                         onChange={handleSortChange}
                     >
-                        <option value="name">Name</option>
-                        <option value="likes">Likes</option>
-                        <option value="dislikes">Dislikes</option>
-                        <option value="listens">Listens</option>
-                        <option value="last_edited">Last Edited</option>
-                        <option value="published">Published</option>
+                        {sortOptions}
                     </Select>
                 </FormControl>
             </Box>

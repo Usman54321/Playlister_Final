@@ -53,13 +53,19 @@ const SortType = {
     SORT_BY_DATE_PUBLISHED: "SORT_BY_DATE_PUBLISHED",
 }
 
+const CurrentPage = {
+    HOME: "HOME",
+    COMMUNITY: "COMMUNITY",
+    USER: "USER",
+}
+
 // WITH THIS WE'RE MAKING OUR GLOBAL DATA STORE
 // AVAILABLE TO THE REST OF THE APPLICATION
 function GlobalStoreContextProvider(props) {
     // THESE ARE ALL THE THINGS OUR DATA STORE WILL MANAGE
     const [store, setStore] = useState({
         currentModal: CurrentModal.NONE,
-        sortType: SortType.SORT_BY_DATE_PUBLISHED,
+        currentPage: CurrentPage.HOME,
         idNamePairs: [],
         currentList: null,
         currentSongIndex: -1,
@@ -87,7 +93,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.CHANGE_LIST_NAME: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    sortType: store.sortType,
+                    currentPage: store.currentPage,
                     idNamePairs: payload.idNamePairs,
                     // currentList: payload.playlist,
                     currentList: null,
@@ -103,7 +109,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.CLOSE_CURRENT_LIST: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    sortType: store.sortType,
+                    currentPage: store.currentPage,
                     idNamePairs: store.idNamePairs,
                     currentList: null,
                     currentSongIndex: -1,
@@ -118,7 +124,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.CREATE_NEW_LIST: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    sortType: store.sortType,
+                    currentPage: store.currentPage,
                     idNamePairs: store.idNamePairs,
                     currentList: payload,
                     currentSongIndex: -1,
@@ -133,7 +139,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.LOAD_ID_NAME_PAIRS: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    sortType: store.sortType,
+                    currentPage: store.currentPage,
                     idNamePairs: payload,
                     currentList: null,
                     currentSongIndex: -1,
@@ -148,7 +154,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.MARK_LIST_FOR_DELETION: {
                 return setStore({
                     currentModal: CurrentModal.DELETE_LIST,
-                    sortType: store.sortType,
+                    currentPage: store.currentPage,
                     idNamePairs: store.idNamePairs,
                     currentList: null,
                     currentSongIndex: -1,
@@ -163,7 +169,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.SET_CURRENT_LIST: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    sortType: store.sortType,
+                    currentPage: store.currentPage,
                     idNamePairs: store.idNamePairs,
                     currentList: payload,
                     currentSongIndex: -1,
@@ -178,7 +184,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.SET_LIST_NAME_EDIT_ACTIVE: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    sortType: store.sortType,
+                    currentPage: store.currentPage,
                     idNamePairs: store.idNamePairs,
                     currentList: payload,
                     currentSongIndex: -1,
@@ -193,7 +199,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.EDIT_SONG: {
                 return setStore({
                     currentModal: CurrentModal.EDIT_SONG,
-                    sortType: store.sortType,
+                    currentPage: store.currentPage,
                     idNamePairs: store.idNamePairs,
                     currentList: store.currentList,
                     currentSongIndex: payload.currentSongIndex,
@@ -207,7 +213,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.REMOVE_SONG: {
                 return setStore({
                     currentModal: CurrentModal.REMOVE_SONG,
-                    sortType: store.sortType,
+                    currentPage: store.currentPage,
                     idNamePairs: store.idNamePairs,
                     currentList: store.currentList,
                     currentSongIndex: payload.currentSongIndex,
@@ -221,7 +227,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.HIDE_MODALS: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    sortType: store.sortType,
+                    currentPage: store.currentPage,
                     idNamePairs: store.idNamePairs,
                     currentList: store.currentList,
                     currentSongIndex: -1,
@@ -415,10 +421,12 @@ function GlobalStoreContextProvider(props) {
     store.getPlaylistSize = function () {
         return store.currentList.songs.length;
     }
-    store.addNewSong = function () {
-        let index = this.getPlaylistSize();
-        this.addCreateSongTransaction(index, "Untitled", "Unknown", "dQw4w9WgXcQ");
-    }
+
+    // store.addNewSong = function () {
+    //     let index = this.getPlaylistSize();
+    //     this.addCreateSongTransaction(index, "Untitled", "Unknown", "dQw4w9WgXcQ");
+    // }
+
     // THIS FUNCTION CREATES A NEW SONG IN THE CURRENT LIST
     // USING THE PROVIDED DATA AND PUTS THIS SONG AT INDEX
     store.createSong = function (index, song) {
