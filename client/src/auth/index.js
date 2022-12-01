@@ -155,7 +155,6 @@ function AuthContextProvider(props) {
             payload: { user: null }
         })
         history.push("/");
-        console.log(JSON.stringify(auth));
     }
 
     return (
