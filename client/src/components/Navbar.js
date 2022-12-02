@@ -56,6 +56,7 @@ export default function Navbar() {
                     size="large"
                     style={{ textDecration: 'none', color: 'black' }}
                     href="/"
+                    disabled={store.currentPage === "HOME"}
                 >
                     <HomeIcon />
                 </IconButton>
@@ -64,6 +65,7 @@ export default function Navbar() {
                     size="large"
                     style={{ textDecration: 'none', color: 'black' }}
                     href="/community-lists/"
+                    disabled={store.currentPage === "COMMUNITY"}
                 >
                     <PeopleOutlineIcon />
                 </IconButton>
@@ -72,6 +74,7 @@ export default function Navbar() {
                     size="large"
                     style={{ textDecration: 'none', color: 'black' }}
                     href="/user-lists/"
+                    disabled={store.currentPage === "USER"}
                 >
                     <PersonOutlineIcon />
                 </IconButton>
@@ -80,7 +83,7 @@ export default function Navbar() {
 
             <SearchBar />
 
-            {/* This box is for the Sort By Chunk */}
+            {/* This box is for the Sort By */}
             <Box
                 sx={{
                     display: "flex",

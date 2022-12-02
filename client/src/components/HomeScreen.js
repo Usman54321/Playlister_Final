@@ -4,11 +4,15 @@ import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
 
 import AddIcon from '@mui/icons-material/Add';
-import Fab from '@mui/material/Fab'
-import List from '@mui/material/List';
-import Typography from '@mui/material/Typography'
+// import Fab from '@mui/material/Fab'
+// import List from '@mui/material/List';
+// import Typography from '@mui/material/Typography'
+// import Box from '@mui/material/Box'
+
+import { Fab, List, Typography, Box } from '@mui/material';
 
 import Navbar from './Navbar';
+import PlayerAndCommentWrapper from './PlayerAndCommentWrapper.js'
 /*
     This React component lists all the top5 lists in the UI.
     
@@ -42,7 +46,41 @@ const HomeScreen = () => {
     return (
         <>
             <Navbar />
-            <div id="playlist-selector">
+            <Box
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    height: "80%",
+                    width: "100%",
+                    // minHeight: "80%"
+                }}
+            >
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        width: "100%",
+                        marginTop: "2%",
+                        height: "100%"
+                    }}
+                >
+
+                    <div id="playlist-selector"
+                        style={{ height: "100%", width: "100%" }}
+                    >
+                        <div id="list-selector-list">
+                            {
+                                listCard
+                            }
+                            <MUIDeleteModal />
+                        </div>
+                    </div>
+
+                    <PlayerAndCommentWrapper />
+                </Box>
+
                 <div id="list-selector-heading">
                     <Fab
                         color="primary"
@@ -54,13 +92,7 @@ const HomeScreen = () => {
                     </Fab>
                     <Typography variant="h2">Your Lists</Typography>
                 </div>
-                <div id="list-selector-list">
-                    {
-                        listCard
-                    }
-                    <MUIDeleteModal />
-                </div>
-            </div>
+            </Box>
         </>
     );
 }

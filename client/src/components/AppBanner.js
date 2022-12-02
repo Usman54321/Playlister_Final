@@ -113,9 +113,9 @@ export default function AppBanner() {
             sx={{ flexGrow: 1 }}
             style={{ display: 'flex', flexDirection: 'column' }}
         >
-            <AppBar 
-            position="static"
-            style={{ backgroundColor: '#e3f2fd', borderRadius: '10px 10px 10px 10px' }}
+            <AppBar
+                position="static"
+                style={{ backgroundColor: '#e3f2fd', borderRadius: '10px 10px 10px 10px' }}
             >
                 <Toolbar>
                     <img

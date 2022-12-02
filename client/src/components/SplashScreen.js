@@ -34,7 +34,7 @@ export default function SplashScreen() {
                             {'Register'}
                         </Button>
                     </Box>
-                    <Button variant="contained" color="primary" sx={{ width: '100%', cursor: 'pointer'}}
+                    <Button variant="contained" color="primary" sx={{ width: '100%', cursor: 'pointer' }}
                         onClick={() => {
                             auth.loginAsGuest();
                         }}
