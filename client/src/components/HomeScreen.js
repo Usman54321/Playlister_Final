@@ -3,7 +3,7 @@ import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
 
-import AddIcon from '@mui/icons-material/Add';
+// import AddIcon from '@mui/icons-material/Add';
 // import Fab from '@mui/material/Fab'
 // import List from '@mui/material/List';
 // import Typography from '@mui/material/Typography'
@@ -25,13 +25,17 @@ const HomeScreen = () => {
         store.loadIdNamePairs();
     }, []);
 
-    function handleCreateNewList() {
-        store.createNewList();
-    }
     let listCard = "";
     if (store && store.idNamePairs.length > 0) {
         listCard =
-            <List sx={{ width: '90%', left: '5%', bgcolor: 'background.paper' }}>
+            <List
+                sx={{
+                    width: '90%',
+                    left: '5%',
+                    // bgcolor: 'background.paper',
+                    bgcolor: 'transparent',
+                    borderRadius: "10px",
+                }}>
                 {
                     store.idNamePairs.map((pair) => (
                         <ListCard
@@ -46,7 +50,7 @@ const HomeScreen = () => {
     return (
         <>
             <Navbar />
-            <Box
+            {/* <Box
                 sx={{
                     display: "flex",
                     flexDirection: "column",
@@ -55,44 +59,30 @@ const HomeScreen = () => {
                     width: "100%",
                     // minHeight: "80%"
                 }}
+            > */}
+            <Box
+                sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    width: "100%",
+                    marginTop: "2%",
+                    height: "100%",
+                }}
             >
-                <Box
-                    sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        width: "100%",
-                        marginTop: "2%",
-                        height: "100%"
-                    }}
+
+                <div id="playlist-selector"
+                    style={{ height: "90%", width: "100%" }}
                 >
-
-                    <div id="playlist-selector"
-                        style={{ height: "100%", width: "100%" }}
-                    >
-                        <div id="list-selector-list">
-                            {
-                                listCard
-                            }
-                            <MUIDeleteModal />
-                        </div>
+                    <div id="list-selector-list">
+                        {listCard}
+                        <MUIDeleteModal />
                     </div>
-
-                    <PlayerAndCommentWrapper />
-                </Box>
-
-                <div id="list-selector-heading">
-                    <Fab
-                        color="primary"
-                        aria-label="add"
-                        id="add-list-button"
-                        onClick={handleCreateNewList}
-                    >
-                        <AddIcon />
-                    </Fab>
-                    <Typography variant="h2">Your Lists</Typography>
                 </div>
+
+                <PlayerAndCommentWrapper />
             </Box>
+            {/* </Box> */}
         </>
     );
 }

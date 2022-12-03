@@ -1,14 +1,17 @@
 import { FormControl, IconButton, Select, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import HomeIcon from '@mui/icons-material/Home';
+// import HomeIcon from '@mui/icons-material/Home';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import SearchBar from "./SearchBar";
 import { useContext } from "react";
 import { GlobalStoreContext } from "../store";
+import { useHistory } from "react-router-dom";
 
 export default function Navbar() {
     const { store } = useContext(GlobalStoreContext);
+    const history = useHistory();
 
     let handleSortChange = (event) => {
         // Change store.sortType to the new value
@@ -55,17 +58,25 @@ export default function Navbar() {
                 <IconButton
                     size="large"
                     style={{ textDecration: 'none', color: 'black' }}
-                    href="/"
-                    disabled={store.currentPage === "HOME"}
+                    onClick={() => {
+                        if (store.currentPage !== "HOME") {
+                            store.setPage("HOME");
+                            history.push("/");
+                        }
+                    }}
                 >
-                    <HomeIcon />
+                    <HomeOutlinedIcon />
                 </IconButton>
 
                 <IconButton
                     size="large"
                     style={{ textDecration: 'none', color: 'black' }}
-                    href="/community-lists/"
-                    disabled={store.currentPage === "COMMUNITY"}
+                    onClick={() => {
+                        if (store.currentPage !== "COMMUNITY") {
+                            store.setPage("COMMUNITY");
+                            history.push("/community-lists");
+                        }
+                    }}
                 >
                     <PeopleOutlineIcon />
                 </IconButton>
@@ -73,8 +84,14 @@ export default function Navbar() {
                 <IconButton
                     size="large"
                     style={{ textDecration: 'none', color: 'black' }}
-                    href="/user-lists/"
-                    disabled={store.currentPage === "USER"}
+                    // href="/user-lists/"
+                    // disabled={store.currentPage === "USER"}
+                    onClick={() => {
+                        if (store.currentPage !== "USER") {
+                            store.setPage("USER");
+                            history.push("/user-lists");
+                        }
+                    }}
                 >
                     <PersonOutlineIcon />
                 </IconButton>

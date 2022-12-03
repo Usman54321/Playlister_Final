@@ -3,6 +3,7 @@ import { React } from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { AuthContextProvider } from './auth';
 import { GlobalStoreContextProvider } from './store'
+import { Box } from '@mui/material'
 import {
     AppBanner,
     HomeWrapper,
@@ -30,6 +31,14 @@ const App = () => {
             <AuthContextProvider>
                 <GlobalStoreContextProvider>
                     <AppBanner />
+                    {/* <Box
+                        sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between",
+                            height: "98%",
+                        }}
+                    > */}
                     <Switch>
                         <Route path="/" exact component={HomeWrapper} />
                         <Route path="/login/" exact component={LoginScreen} />
@@ -39,6 +48,7 @@ const App = () => {
                         <Route path="/user-lists/" exact component={UserView} />
                     </Switch>
                     <Statusbar />
+                    {/* </Box> */}
                 </GlobalStoreContextProvider>
             </AuthContextProvider>
         </BrowserRouter>

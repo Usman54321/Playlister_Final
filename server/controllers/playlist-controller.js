@@ -9,7 +9,7 @@ const User = require('../models/user-model');
 */
 createPlaylist = (req, res) => {
     const body = req.body;
-    //console.log("createPlaylist body: " + JSON.stringify(body));
+    // console.log("createPlaylist body: " + JSON.stringify(body));
 
     if (!body) {
         return res.status(400).json({
@@ -19,13 +19,13 @@ createPlaylist = (req, res) => {
     }
 
     const playlist = new Playlist(body);
-    //console.log("playlist: " + playlist.toString());
+    // console.log("playlist: " + playlist.toString());
     if (!playlist) {
         return res.status(400).json({ success: false, error: err })
     }
 
     User.findOne({ _id: req.userId }, (err, user) => {
-        //console.log("user found: " + JSON.stringify(user));
+        // console.log("user found: " + JSON.stringify(user));
         user.playlists.push(playlist._id);
         user
             .save()
@@ -220,11 +220,34 @@ updatePlaylist = async (req, res) => {
         asyncFindUser(playlist);
     })
 }
+
+getPlaylistAuthor = async (req, res) => {
+    // Given the playlist id, return the author's name
+    await Playlist.findById({ _id: req.params.id }, (err, list) => {
+        if (err) {
+            return res.status(400).json({ success: false, error: err });
+        }
+
+        // Get the ownerEmail
+        let ownerEmail = list.ownerEmail;
+        // Find the user with that email
+        async function asyncFindUser(email) {
+            await User.findOne({ email: email }).then(user => {
+                let name = user.firstName + " " + user.lastName;
+                // console.log("Returning author: " + name);
+                return res.status(200).json({ success: true, author: name });
+            }).catch(err => console.log(err))
+        }
+        asyncFindUser(ownerEmail);
+    }).catch(err => console.log(err))
+}
+
 module.exports = {
     createPlaylist,
     deletePlaylist,
     getPlaylistById,
     getPlaylistPairs,
     getPlaylists,
-    updatePlaylist
+    updatePlaylist,
+    getPlaylistAuthor,
 }

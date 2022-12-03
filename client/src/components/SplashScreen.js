@@ -47,7 +47,7 @@ export default function SplashScreen() {
                         align="center"
                         sx={{ mt: 3 }}
                     >
-                        {'Project by Usman Rehan, 2022'}
+                        {'Project by Muhammad Usman Rehan, 2022'}
                     </Typography>
                 </Box>
             </Box>

@@ -12,7 +12,7 @@
   --swatch-contrast: #111111;
   --swatch-accent: #669966;
   --swatch-status: #123456;
-  --my-font-family: "Robaaaoto";
+  /* --my-font-family: "Robaaaoto"; */
   --bounceEasing: cubic-bezier(0.51, 0.92, 0.24, 1.15);
 }
 
@@ -27,6 +27,7 @@
 
 body {
   background-color: var(--swatch-foundation);
+  overflow: hidden;
 }
 
 #root {
@@ -64,7 +65,7 @@ body {
 }
 
 #splash-screen {
-  background-image: linear-gradient(to top, rgb(120,232,247), rgb(255, 255, 255));
+  background-image: linear-gradient(to top, rgb(120, 232, 247), rgb(255, 255, 255));
   color: white;
   font-size: 5vw;
   border-color: black;
@@ -128,7 +129,8 @@ body {
   top: 90%;
   width: 100%;
   height: 10%;
-  background-color: lightsalmon;
+  /* background-color: lightsalmon; */
+  background-color: 'transparent';
   display: flex;
   align-items: center;
   justify-content: center;

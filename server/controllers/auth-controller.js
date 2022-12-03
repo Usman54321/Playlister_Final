@@ -74,8 +74,8 @@ loginUser = async (req, res) => {
             success: true,
             user: {
                 firstName: existingUser.firstName,
-                lastName: existingUser.lastName,  
-                email: existingUser.email              
+                lastName: existingUser.lastName,
+                email: existingUser.email
             }
         })
 
@@ -137,8 +137,9 @@ registerUser = async (req, res) => {
         //console.log("passwordHash: " + passwordHash);
 
         const newUser = new User({
-            firstName, lastName, email, passwordHash
+            firstName, lastName, email, passwordHash, likedPlaylists: [], dislikedPlaylists: [], playlists: []
         });
+        
         const savedUser = await newUser.save();
         //console.log("new user saved: " + savedUser._id);
 
@@ -154,8 +155,8 @@ registerUser = async (req, res) => {
             success: true,
             user: {
                 firstName: savedUser.firstName,
-                lastName: savedUser.lastName,  
-                email: savedUser.email              
+                lastName: savedUser.lastName,
+                email: savedUser.email
             }
         })
 
