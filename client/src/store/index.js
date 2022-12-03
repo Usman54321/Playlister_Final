@@ -88,13 +88,13 @@ function GlobalStoreContextProvider(props) {
     // HANDLE EVERY TYPE OF STATE CHANGE
     const storeReducer = (action) => {
         const { type, payload } = action;
+        console.log("Store: " + JSON.stringify(store, null, 3));
+
         if (type === GlobalStoreActionType.LOAD_ID_NAME_PAIRS) {
             console.log("storeReducer: " + type + " " + JSON.stringify(payload, null, 3));
         }
         else
             console.log("storeReducer: " + type + " " + payload);
-
-        console.log("Store: " + JSON.stringify(store, null, 3));
 
         switch (type) {
             // LIST UPDATE OF ITS NAME
@@ -319,8 +319,8 @@ function GlobalStoreContextProvider(props) {
     // THIS FUNCTION CREATES A NEW LIST
     store.createNewList = async function () {
         let newListName = "Untitled" + store.newListCounter;
-        const response = await api.createPlaylist(newListName, [], auth.user.email);
-        //console.log("createNewList response: " + response);
+        const response = await api.createPlaylist(newListName, [], auth.user.userName);
+        // console.log("createNewList response: " + JSON.stringify(response, null, 3));
         if (response.status === 201) {
             tps.clearAllTransactions();
             // let newList = response.data.playlist;
@@ -596,16 +596,6 @@ function GlobalStoreContextProvider(props) {
     store.search = (query) => {
         // TODO: Add search to api
         console.log(query);
-    }
-
-    store.getAuthor = (id) => {
-        async function asyncGetAuthor() {
-            const response = await api.getPlaylistAuthor(id);
-            if (response.data.success) {
-                return '' + response.data.author;
-            }
-        }
-        return asyncGetAuthor();
     }
 
     store.setPage = (page) => {

@@ -42,6 +42,9 @@ const HomeScreen = () => {
                             key={pair._id}
                             idNamePair={pair}
                             selected={false}
+                            likes={pair.likes}
+                            dislikes={pair.dislikes}
+                            author={pair.ownerUserName}
                         />
                     ))
                 }

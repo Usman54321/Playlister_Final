@@ -75,9 +75,9 @@ function AuthContextProvider(props) {
         }
     }
 
-    auth.registerUser = async function (firstName, lastName, email, password, passwordVerify) {
+    auth.registerUser = async function (firstName, lastName, email, userName, password, passwordVerify) {
         try {
-            const response = await api.registerUser(firstName, lastName, email, password, passwordVerify);
+            const response = await api.registerUser(firstName, lastName, email, userName, password, passwordVerify);
             if (response.status === 200) {
                 authReducer({
                     type: AuthActionType.LOGIN_USER,
@@ -155,6 +155,11 @@ function AuthContextProvider(props) {
             payload: { user: null }
         })
         history.push("/");
+    }
+
+    auth.getNameGivenEmail = function (email) {
+        const response = api.getNameGivenEmail(email);
+        return response;
     }
 
     return (

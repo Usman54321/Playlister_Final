@@ -123,6 +123,10 @@ export default function AppBanner() {
                         alt="Playlister Logo"
                         height={"50px"}
                         onClick={() => {
+                            if (auth && store && auth.loggedIn && store.currentPage !== "HOME") {
+                                store.setPage("HOME");
+                                // console.log('Setting page to HOME');
+                            }
                             store.closeCurrentList();
                         }}
                         style={{ cursor: 'pointer' }}

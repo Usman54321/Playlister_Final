@@ -9,7 +9,7 @@ const User = require('../models/user-model');
 */
 createPlaylist = (req, res) => {
     const body = req.body;
-    // console.log("createPlaylist body: " + JSON.stringify(body));
+    // console.log("createPlaylist body: " + JSON.stringify(body, null, 3));
 
     if (!body) {
         return res.status(400).json({
@@ -25,7 +25,7 @@ createPlaylist = (req, res) => {
     }
 
     User.findOne({ _id: req.userId }, (err, user) => {
-        // console.log("user found: " + JSON.stringify(user));
+        // console.log("user found: " + JSON.stringify(user, null, 3));
         user.playlists.push(playlist._id);
         user
             .save()
@@ -38,8 +38,9 @@ createPlaylist = (req, res) => {
                         })
                     })
                     .catch(error => {
+                        console.log("error: " + error);
                         return res.status(400).json({
-                            errorMessage: 'Playlist Not Created!'
+                            errorMessage: 'Playlist Not Created!',
                         })
                     })
             });
@@ -59,7 +60,7 @@ deletePlaylist = async (req, res) => {
 
         // DOES THIS LIST BELONG TO THIS USER?
         async function asyncFindUser(list) {
-            User.findOne({ email: list.ownerEmail }, (err, user) => {
+            User.findOne({ userName: list.ownerUserName }, (err, user) => {
                 //console.log("user._id: " + user._id);
                 //console.log("req.userId: " + req.userId);
                 if (user._id == req.userId) {
@@ -96,7 +97,7 @@ getPlaylistById = async (req, res) => {
 
         // DOES THIS LIST BELONG TO THIS USER?
         async function asyncFindUser(list) {
-            await User.findOne({ email: list.ownerEmail }, (err, user) => {
+            await User.findOne({ userName: list.ownerUserName }, (err, user) => {
                 //console.log("user._id: " + user._id);
                 //console.log("req.userId: " + req.userId);
                 if (user._id == req.userId) {
@@ -113,13 +114,13 @@ getPlaylistById = async (req, res) => {
     }).catch(err => console.log(err))
 }
 getPlaylistPairs = async (req, res) => {
-    //console.log("getPlaylistPairs");
+    // console.log("getPlaylistPairs");
     await User.findOne({ _id: req.userId }, (err, user) => {
-        //console.log("find user with id " + req.userId);
-        async function asyncFindList(email) {
-            //console.log("find all Playlists owned by " + email);
-            await Playlist.find({ ownerEmail: email }, (err, playlists) => {
-                //console.log("found Playlists: " + JSON.stringify(playlists));
+        // console.log("find user with id " + req.userId);
+        async function asyncFindList(userName) {
+            // console.log("find all Playlists owned by " + userName);
+            await Playlist.find({ ownerUserName: userName }, (err, playlists) => {
+                // console.log("found Playlists: " + JSON.stringify(playlists));
                 if (err) {
                     return res.status(400).json({ success: false, error: err })
                 }
@@ -137,7 +138,10 @@ getPlaylistPairs = async (req, res) => {
                         let list = playlists[key];
                         let pair = {
                             _id: list._id,
-                            name: list.name
+                            name: list.name,
+                            ownerUserName: list.ownerUserName,
+                            likes: list.likes,
+                            dislikes: list.dislikes
                         };
                         pairs.push(pair);
                     }
@@ -145,7 +149,7 @@ getPlaylistPairs = async (req, res) => {
                 }
             }).catch(err => console.log(err))
         }
-        asyncFindList(user.email);
+        asyncFindList(user.userName);
     }).catch(err => console.log(err))
 }
 getPlaylists = async (req, res) => {
@@ -184,7 +188,7 @@ updatePlaylist = async (req, res) => {
 
         // DOES THIS LIST BELONG TO THIS USER?
         async function asyncFindUser(list) {
-            await User.findOne({ email: list.ownerEmail }, (err, user) => {
+            await User.findOne({ userName: list.ownerUserName }, (err, user) => {
                 //console.log("user._id: " + user._id);
                 //console.log("req.userId: " + req.userId);
                 if (user._id == req.userId) {
@@ -221,27 +225,6 @@ updatePlaylist = async (req, res) => {
     })
 }
 
-getPlaylistAuthor = async (req, res) => {
-    // Given the playlist id, return the author's name
-    await Playlist.findById({ _id: req.params.id }, (err, list) => {
-        if (err) {
-            return res.status(400).json({ success: false, error: err });
-        }
-
-        // Get the ownerEmail
-        let ownerEmail = list.ownerEmail;
-        // Find the user with that email
-        async function asyncFindUser(email) {
-            await User.findOne({ email: email }).then(user => {
-                let name = user.firstName + " " + user.lastName;
-                // console.log("Returning author: " + name);
-                return res.status(200).json({ success: true, author: name });
-            }).catch(err => console.log(err))
-        }
-        asyncFindUser(ownerEmail);
-    }).catch(err => console.log(err))
-}
-
 module.exports = {
     createPlaylist,
     deletePlaylist,
@@ -249,5 +232,4 @@ module.exports = {
     getPlaylistPairs,
     getPlaylists,
     updatePlaylist,
-    getPlaylistAuthor,
 }
