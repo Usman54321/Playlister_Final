@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
+import AuthContext from '../auth';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import ListItem from '@mui/material/ListItem';
@@ -21,8 +22,9 @@ import SongComponent from './SongComponent';
 */
 function ListCard(props) {
     const { store } = useContext(GlobalStoreContext);
-    const [expanded, setExpanded] = useState(false);
     const { idNamePair, selected, likes, dislikes, author } = props;
+    const [expanded, setExpanded] = useState(false);
+    const { auth } = useContext(AuthContext);
 
     let icon = <KeyboardDoubleArrowDownIcon
         style={{ fontSize: '24pt' }}
@@ -59,36 +61,24 @@ function ListCard(props) {
         store.editPlaylist(idNamePair._id);
     }
 
+    function handleLike(event) {
+        event.stopPropagation();
+    }
+
 
     let cardElement;
 
-    if (!expanded) {
-        cardElement =
-            <ListItem
-                id={idNamePair._id}
-                key={idNamePair._id}
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    // p: 1,
-                    borderRadius: "10px",
-                    // marginLeft: "1%",
-                    // border: "1px solid black",
-                    marginBottom: "1%",
-                    backgroundColor: "#e3f2fd",
-                }}
-                style={{ width: '98%', fontSize: '20pt' }}
-                button
-                onClick={(event) => {
-                    handleLoadList(event, idNamePair._id)
-                }}
-            >
+    let expandedSongs = <></>
+    let expandedButtons = <div></div>
+
+
+    if (expanded) {
+        expandedSongs =
+            <ListItem>
                 <Box
                     sx={{
                         display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
+                        flexDirection: 'column',
                         width: '100%'
                     }}
                 >
@@ -96,161 +86,120 @@ function ListCard(props) {
                         p: 1,
                         flexGrow: 1,
                     }}>
-                        {idNamePair.name}
+                        <SongComponent listId={idNamePair._id} />
                     </Box>
-                    <ThumbUpIcon sx={{ p: 1 }} />
-                    {likes}
-                    <ThumbDownIcon sx={{ p: 1 }} />
-                    {dislikes}
                 </Box>
+            </ListItem >
 
-                <Box
+        expandedButtons =
+            <Box sx={{ p: 1 }}>
+                <Button
+                    color="primary"
+                    variant="outlined"
+                    onClick={handleEdit}
                     sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        width: '100%'
+                        backgroundColor: "#e3f2fd",
                     }}
                 >
-                    <Box
-                        sx={{
-                            p: 1,
-                            flexGrow: 1,
-                            fontSize: '12pt',
-                        }}
-                    >
-                        {'By:\t' + author}
-                    </Box>
-                </Box>
-
-                <Box
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'row-reverse',
-                        width: '100%'
-                    }}
-                >
-                    <Box sx={{ p: 1 }}>
-                        <IconButton
-                            onClick={handleExpansion}
-                            aria-label='expand'
-                        >
-                            {icon}
-                        </IconButton>
-                    </Box>
-                </Box>
-            </ListItem>
+                    {'Edit'}
+                </Button>
+            </Box>
     }
-    else {
-        // This is the expanded view of the list card
-        cardElement =
-            <ListItem
-                id={idNamePair._id}
-                key={idNamePair._id}
+    // This is the expanded view of the list card
+    cardElement =
+        <ListItem
+            id={idNamePair._id}
+            key={idNamePair._id}
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                // p: 1,
+                borderRadius: "10px",
+                // marginLeft: "1%",
+                // border: "1px solid black",
+                marginBottom: "1%",
+                backgroundColor: "#e3f2fd",
+            }}
+            style={{ width: '98%', fontSize: '20pt' }}
+            button
+            onClick={(event) => {
+                handleLoadList(event, idNamePair._id)
+            }}
+        >
+            <Box
                 sx={{
                     display: 'flex',
-                    flexDirection: 'column',
-                    // p: 1,
-                    borderRadius: "10px",
-                    // marginLeft: "1%",
-                    // border: "1px solid black",
-                    marginBottom: "1%",
-                    backgroundColor: "#e3f2fd",
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    width: '100%'
                 }}
-                style={{ width: '98%', fontSize: '20pt' }}
-                button
-                onClick={(event) => {
-                    handleLoadList(event, idNamePair._id)
+            >
+                <Box sx={{
+                    p: 1,
+                    flexGrow: 1,
+                }}>
+                    {idNamePair.name}
+                </Box>
+                <Button
+                    sx={{
+                        color: 'black'
+                    }}
+                >
+                    <ThumbUpIcon sx={{ p: 1 }} />
+                </Button>
+                {likes}
+                <Button
+                    sx={{
+                        color: 'black'
+                    }}
+                >
+                    <ThumbDownIcon sx={{ p: 1 }} />
+                </Button>
+                {dislikes}
+            </Box>
+
+            {/* Right here we have to display the songs within this list */}
+            {expandedSongs}
+
+
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    width: '100%'
                 }}
             >
                 <Box
                     sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        width: '100%'
-                    }}
-                >
-                    <Box sx={{
                         p: 1,
                         flexGrow: 1,
-                    }}>
-                        {idNamePair.name}
-                    </Box>
-                    <ThumbUpIcon sx={{ p: 1 }} />
-                    {likes}
-                    <ThumbDownIcon sx={{ p: 1 }} />
-                    {dislikes}
-                </Box>
-
-                {/* Right here we have to display the songs within this list */}
-                <ListItem>
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            width: '100%'
-                        }}
-                    >
-                        <Box sx={{
-                            p: 1,
-                            flexGrow: 1,
-                        }}>
-                            <SongComponent listId={idNamePair._id} />
-                        </Box>
-                    </Box>
-                </ListItem>
-
-
-                <Box
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        width: '100%'
+                        fontSize: '12pt',
                     }}
                 >
-                    <Box
-                        sx={{
-                            p: 1,
-                            flexGrow: 1,
-                            fontSize: '12pt',
-                        }}
-                    >
-                        {'By:\t' + author}
-                    </Box>
+                    {'By:\t' + author}
                 </Box>
+            </Box>
 
-                <Box
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        width: '100%'
-                    }}
-                >
-                    <Box sx={{ p: 1 }}>
-                        <Button
-                            color="primary"
-                            variant="outlined"
-                            onClick={handleEdit}
-                            sx={{
-                                backgroundColor: "#e3f2fd",
-                            }}
-                        >
-                            {'Edit'}
-                        </Button>
-                    </Box>
-                    <Box sx={{ p: 1 }}>
-                        <IconButton
-                            onClick={handleExpansion}
-                            aria-label='expand'
-                        >
-                            {icon}
-                        </IconButton>
-                    </Box>
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    width: '100%'
+                }}
+            >
+                {expandedButtons}
+                <Box sx={{ p: 1 }}>
+                    <IconButton
+                        onClick={handleExpansion}
+                        aria-label='expand'
+                    >
+                        {icon}
+                    </IconButton>
                 </Box>
-            </ListItem>
-    }
+            </Box>
+        </ListItem>
 
     return (
         cardElement

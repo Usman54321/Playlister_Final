@@ -21,7 +21,10 @@ getLoggedIn = async (req, res) => {
             user: {
                 firstName: loggedInUser.firstName,
                 lastName: loggedInUser.lastName,
-                email: loggedInUser.email
+                email: loggedInUser.email,
+                userName: loggedInUser.userName,
+                likedPlaylists: loggedInUser.likedPlaylists,
+                dislikedPlaylists: loggedInUser.dislikedPlaylists,
             }
         })
     } catch (err) {
@@ -76,7 +79,9 @@ loginUser = async (req, res) => {
                 firstName: existingUser.firstName,
                 lastName: existingUser.lastName,
                 email: existingUser.email,
-                userName: existingUser.userName
+                userName: existingUser.userName,
+                likedPlaylists: existingUser.likedPlaylists,
+                dislikedPlaylists: existingUser.dislikedPlaylists,
             }
         })
 
@@ -167,7 +172,9 @@ registerUser = async (req, res) => {
                 firstName: savedUser.firstName,
                 lastName: savedUser.lastName,
                 email: savedUser.email,
-                userName: savedUser.userName
+                userName: savedUser.userName,
+                likedPlaylists: savedUser.likedPlaylists,
+                dislikedPlaylists: savedUser.dislikedPlaylists,
             }
         })
 

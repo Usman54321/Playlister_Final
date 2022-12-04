@@ -243,7 +243,8 @@ export default function EditPlaylistView() {
                         justifyContent: "space-between",
                         width: "100%",
                         marginTop: "2%",
-                        backgroundColor: "#f5f5f5",
+                        backgroundColor: "#b1bfca",
+                        borderRadius: "10px",
                     }}
                 >
                     {/* We need Undo Redo buttons */}
