@@ -126,10 +126,17 @@ export default function EditPlaylistView() {
                             flexDirection: "row",
                             justifyContent: "space-between",
                             width: "100%",
+                            alignItems: "center",
                         }}
                     >
                         {nameElement}
-                        <IconButton onClick={handleToggleEdit} aria-label='edit'>
+                        <IconButton
+                            sx={{
+                                marginRight: "2%",
+                                marginTop: "2%",
+                            }}
+                            onClick={handleToggleEdit}
+                            aria-label='edit'>
                             <EditIcon style={{ fontSize: '20pt' }} />
                         </IconButton>
                     </Box>
