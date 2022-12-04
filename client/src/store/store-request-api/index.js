@@ -27,6 +27,7 @@ export const createPlaylist = (newListName, newSongs, userName) => {
         // SPECIFY THE PAYLOAD
         name: newListName,
         songs: newSongs,
+        published: false,
         ownerUserName: userName,
         likes: 0,
         dislikes: 0,

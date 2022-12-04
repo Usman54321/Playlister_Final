@@ -166,13 +166,13 @@ function GlobalStoreContextProvider(props) {
                     currentModal: CurrentModal.DELETE_LIST,
                     currentPage: store.currentPage,
                     idNamePairs: store.idNamePairs,
-                    currentList: null,
+                    currentList: store.currentList,
                     currentSongIndex: -1,
                     currentSong: null,
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: payload.id,
-                    listMarkedForDeletion: payload.playlist
+                    listMarkedForDeletion: store.currentList
                 });
             }
             // UPDATE A LIST
@@ -611,8 +611,22 @@ function GlobalStoreContextProvider(props) {
     }
 
     store.search = (query) => {
-        // TODO: Add search to api
-        console.log(query);
+        async function asyncLoadIdNamePairs() {
+            const response = await api.getPlaylistPairs();
+            if (response.data.success) {
+                let pairsArray = response.data.idNamePairs;
+                let filteredPairsArray = pairsArray.filter(pair =>
+                    pair.name.toLowerCase().includes(query.toLowerCase()));
+                storeReducer({
+                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                    payload: filteredPairsArray
+                });
+            }
+            else {
+                console.log("API FAILED TO GET THE LIST PAIRS");
+            }
+        }
+        asyncLoadIdNamePairs();
     }
 
     store.setPage = (page) => {

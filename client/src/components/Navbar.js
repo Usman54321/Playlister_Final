@@ -63,6 +63,9 @@ export default function Navbar() {
                             store.setPage("HOME");
                             history.push("/");
                         }
+                        else {
+                            store.closeCurrentList();
+                        }
                     }}
                 >
                     <HomeOutlinedIcon />

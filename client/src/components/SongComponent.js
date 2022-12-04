@@ -32,9 +32,11 @@ export default function SongComponent(props) {
     else {
         if (currentList.length === 0) {
             return (
-                <Typography variant="h5">
-                    {'No Songs in Playlist'}
-                </Typography>
+                // <Typography variant="h5">
+                //     {'No Songs in Playlist'}
+                // </Typography>
+                <br>
+                </br>
             );
         }
         return (

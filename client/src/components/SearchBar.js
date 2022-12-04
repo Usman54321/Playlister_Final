@@ -2,19 +2,17 @@ import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { GlobalStoreContext } from '../store';
 
 export default function SearchBar() {
     const { store } = useContext(GlobalStoreContext);
+    const [searchTerm, setSearchTerm] = useState("");
 
     // Handler for clicking the search button
     let handleSearch = (event) => {
         // Prevent the page from reloading
         event.preventDefault();
-        // Get the search term from the input field
-        let searchTerm = document.getElementById("search-input").value;
-        // Call search function in store
         store.search(searchTerm);
     }
 
@@ -28,6 +26,10 @@ export default function SearchBar() {
                 sx={{ ml: 1, flex: 1 }}
                 placeholder="Search"
                 inputProps={{ 'aria-label': 'search' }}
+                onChange={(event) => {
+                    setSearchTerm(event.target.value)
+                    store.search(event.target.value)
+                }}
             />
             <IconButton
                 type="button"

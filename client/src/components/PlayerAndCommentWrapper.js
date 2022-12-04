@@ -27,11 +27,20 @@ export default function PlayerAndCommentWrapper() {
         let songs = store.currentList.songs;
         let currentSong = songs[currentIndex];
         let currentYTID;
+        let playlistName = "";
+        let songTitle = "";
+        let songArtist = "";
+        let index = currentIndex + 1;
         if (songs.length === 0 && currentSong === undefined) {
             console.log("No songs in playlist");
             currentYTID = null;
-        } else
+            index = "";
+        } else {
             currentYTID = currentSong.youTubeId;
+            playlistName = store.currentList.name;
+            songTitle = currentSong.title;
+            songArtist = currentSong.artist;
+        }
 
         playerBody =
             <>
@@ -61,22 +70,22 @@ export default function PlayerAndCommentWrapper() {
                     <p
                         style={{ margin: "0px 0px 0px 0px" }}
                     >
-                        {'Playlist: ' + store.currentList.name}
+                        {'Playlist: ' + playlistName}
                     </p>
                     <p
                         style={{ margin: "0px 0px 0px 0px" }}
                     >
-                        {'Song #: ' + (currentIndex + 1)}
+                        {'Song #: ' + index}
                     </p>
                     <p
                         style={{ margin: "0px 0px 0px 0px" }}
                     >
-                        {'Title: ' + currentSong.title}
+                        {'Title: ' + songTitle}
                     </p>
                     <p
                         style={{ margin: "0px 0px 0px 0px" }}
                     >
-                        {'Artist: ' + currentSong.artist}
+                        {'Artist: ' + songArtist}
                     </p>
                 </Box>
 

@@ -116,6 +116,7 @@ export default function AppBanner() {
             style={{
                 display: 'flex',
                 flexDirection: 'column',
+                height: '64px'
             }}
         >
             <AppBar
