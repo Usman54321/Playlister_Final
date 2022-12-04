@@ -38,7 +38,7 @@ createPlaylist = (req, res) => {
                         })
                     })
                     .catch(error => {
-                        console.log("error: " + error);
+                        console.log("createPlaylist error : " + error);
                         return res.status(400).json({
                             errorMessage: 'Playlist Not Created!',
                         })
@@ -67,13 +67,13 @@ deletePlaylist = async (req, res) => {
                     //console.log("correct user!");
                     Playlist.findOneAndDelete({ _id: req.params.id }, () => {
                         return res.status(200).json({ success: true })
-                    }).catch(err => console.log(err))
+                    }).catch(err => console.log("deletePlaylist error: " + err))
                     // Delete the playlist from the user's list of playlists
                     let index = user.playlists.indexOf(req.params.id);
                     if (index > -1) {
                         user.playlists.splice(index, 1);
                     }
-                    user.save().catch(err => console.log(err));
+                    user.save().catch(err => console.log("deletePlaylist error: " + err));
                 }
                 else {
                     console.log("incorrect user!");
@@ -111,7 +111,7 @@ getPlaylistById = async (req, res) => {
             });
         }
         asyncFindUser(list);
-    }).catch(err => console.log(err))
+    }).catch(err => console.log("getPlaylistById error: " + err))
 }
 getPlaylistPairs = async (req, res) => {
     // console.log("getPlaylistPairs");
@@ -147,10 +147,10 @@ getPlaylistPairs = async (req, res) => {
                     }
                     return res.status(200).json({ success: true, idNamePairs: pairs })
                 }
-            }).catch(err => console.log(err))
+            }).catch(err => console.log("getPlaylistPairs error: " + err))
         }
         asyncFindList(user.userName);
-    }).catch(err => console.log(err))
+    }).catch(err => console.log("getPlaylistPairs error :" + err))
 }
 getPlaylists = async (req, res) => {
     await Playlist.find({}, (err, playlists) => {
@@ -163,7 +163,7 @@ getPlaylists = async (req, res) => {
                 .json({ success: false, error: `Playlists not found` })
         }
         return res.status(200).json({ success: true, data: playlists })
-    }).catch(err => console.log(err))
+    }).catch(err => console.log("getPlaylists error: " + err))
 }
 updatePlaylist = async (req, res) => {
     const body = req.body
@@ -208,6 +208,7 @@ updatePlaylist = async (req, res) => {
                             })
                         })
                         .catch(error => {
+                            console.log("updatePlaylist error: " + error);
                             console.log("FAILURE: " + JSON.stringify(error));
                             return res.status(404).json({
                                 error,

@@ -2,7 +2,10 @@ import { Box } from "@mui/material";
 import React from 'react';
 import YouTube from 'react-youtube';
 
-export default function Player() {
+export default function Player(props) {
+    let id = props.id;
+    if (!id)
+        id = 'dQw4w9WgXcQ'
     return (
         <Box
             sx={{
@@ -11,7 +14,7 @@ export default function Player() {
             }}
         >
             <YouTube
-                videoId="dQw4w9WgXcQ"
+                videoId={id}
                 opts={{
                     width: '80%',
                 }}

@@ -12,7 +12,8 @@ import {
     WorkspaceScreen,
     Statusbar,
     CommunityView,
-    UserView
+    UserView,
+    EditPlaylistView
 } from './components'
 /*
     This is our application's top-level component.
@@ -30,25 +31,27 @@ const App = () => {
         <BrowserRouter>
             <AuthContextProvider>
                 <GlobalStoreContextProvider>
-                    <AppBanner />
-                    {/* <Box
+                    <Box
                         sx={{
                             display: "flex",
                             flexDirection: "column",
                             justifyContent: "space-between",
-                            height: "98%",
+                            height: "100%",
+                            width: "100%",
                         }}
-                    > */}
-                    <Switch>
-                        <Route path="/" exact component={HomeWrapper} />
-                        <Route path="/login/" exact component={LoginScreen} />
-                        <Route path="/register/" exact component={RegisterScreen} />
-                        <Route path="/playlist/:id" exact component={WorkspaceScreen} />
-                        <Route path="/community-lists/" exact component={CommunityView} />
-                        <Route path="/user-lists/" exact component={UserView} />
-                    </Switch>
-                    <Statusbar />
-                    {/* </Box> */}
+                    >
+                        < AppBanner />
+                        <Switch>
+                            <Route path="/" exact component={HomeWrapper} />
+                            <Route path="/login/" exact component={LoginScreen} />
+                            <Route path="/register/" exact component={RegisterScreen} />
+                            <Route path="/playlist/:id" exact component={WorkspaceScreen} />
+                            <Route path="/community-lists/" exact component={CommunityView} />
+                            <Route path="/user-lists/" exact component={UserView} />
+                            <Route path="/edit-playlist/:id" exact component={EditPlaylistView} />
+                        </Switch>
+                        <Statusbar />
+                    </Box>
                 </GlobalStoreContextProvider>
             </AuthContextProvider>
         </BrowserRouter>

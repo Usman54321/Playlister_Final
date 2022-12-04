@@ -30,8 +30,8 @@ const HomeScreen = () => {
         listCard =
             <List
                 sx={{
-                    width: '90%',
-                    left: '5%',
+                    width: '100%',
+                    // left: '5%',
                     // bgcolor: 'background.paper',
                     bgcolor: 'transparent',
                     borderRadius: "10px",
@@ -53,27 +53,16 @@ const HomeScreen = () => {
     return (
         <>
             <Navbar />
-            {/* <Box
-                sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    height: "80%",
-                    width: "100%",
-                    // minHeight: "80%"
-                }}
-            > */}
             <Box
                 sx={{
                     display: "flex",
                     flexDirection: "row",
                     justifyContent: "space-between",
                     width: "100%",
-                    marginTop: "2%",
-                    height: "100%",
+                    marginTop: "1%",
+                    height: "80%",
                 }}
             >
-
                 <div id="playlist-selector"
                     style={{ height: "90%", width: "100%" }}
                 >
@@ -85,7 +74,6 @@ const HomeScreen = () => {
 
                 <PlayerAndCommentWrapper />
             </Box>
-            {/* </Box> */}
         </>
     );
 }

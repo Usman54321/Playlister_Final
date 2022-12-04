@@ -1,6 +1,6 @@
 import Player from './Player';
 import CommentSection from './CommentSection';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { Box, Button, IconButton } from '@mui/material';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import StopSharpIcon from '@mui/icons-material/StopSharp';
@@ -11,19 +11,33 @@ import GlobalStoreContext from '../store';
 
 export default function PlayerAndCommentWrapper() {
     const [currentView, setCurrentView] = useState("player");
+    const [currentIndex, setCurrentIndex] = useState(0);
     let playerColor = currentView === "player" ? "white" : "#b1bfca";
     let commentColor = currentView === "comment" ? "white" : "#b1bfca";
     const { store } = useContext(GlobalStoreContext);
+
     let playerBody;
     if (store.currentList === null) {
         playerBody =
             <h2>
                 {'No Playlist Selected'}
             </h2>
-    } else {
+    }
+    else {
+        let songs = store.currentList.songs;
+        let currentSong = songs[currentIndex];
+        let currentYTID;
+        if (songs.length === 0 && currentSong === undefined) {
+            console.log("No songs in playlist");
+            currentYTID = null;
+        } else
+            currentYTID = currentSong.youTubeId;
+
         playerBody =
             <>
-                <Player />
+                <Player
+                    id={currentYTID}
+                />
                 <div
                     style={{
                         display: "flex",
@@ -52,17 +66,17 @@ export default function PlayerAndCommentWrapper() {
                     <p
                         style={{ margin: "0px 0px 0px 0px" }}
                     >
-                        {'Song #: '}
+                        {'Song #: ' + (currentIndex + 1)}
                     </p>
                     <p
                         style={{ margin: "0px 0px 0px 0px" }}
                     >
-                        {'Title: '}
+                        {'Title: ' + currentSong.title}
                     </p>
                     <p
                         style={{ margin: "0px 0px 0px 0px" }}
                     >
-                        {'Artist: '}
+                        {'Artist: ' + currentSong.artist}
                     </p>
                 </Box>
 
@@ -78,6 +92,12 @@ export default function PlayerAndCommentWrapper() {
                     <IconButton
                         size="large"
                         style={{ textDecration: 'none', color: 'black' }}
+                        disabled={currentIndex === 0}
+                        onClick={() => {
+                            if (currentIndex > 0) {
+                                setCurrentIndex(currentIndex - 1);
+                            }
+                        }}
                     >
                         <SkipPreviousIcon />
                     </IconButton>
@@ -102,6 +122,12 @@ export default function PlayerAndCommentWrapper() {
                     <IconButton
                         size="large"
                         style={{ textDecration: 'none', color: 'black' }}
+                        disabled={currentIndex === songs.length - 1}
+                        onClick={() => {
+                            if (currentIndex < songs.length - 1) {
+                                setCurrentIndex(currentIndex + 1);
+                            }
+                        }}
                     >
                         <SkipNextIcon />
                     </IconButton>

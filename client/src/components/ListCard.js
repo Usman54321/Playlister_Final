@@ -8,10 +8,11 @@ import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrow
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import { Button } from '@mui/material';
 
-// import SongComponent from './SongComponent';
-// import DeleteIcon from '@mui/icons-material/Delete';
-// import EditIcon from '@mui/icons-material/Edit';
+
+
+import SongComponent from './SongComponent';
 
 
 /*
@@ -90,8 +91,14 @@ function ListCard(props) {
         setText(event.target.value);
     }
 
+    function handleEdit(event) {
+        event.stopPropagation();
+        store.editPlaylist(idNamePair._id);
+    }
+
 
     let cardElement;
+
     if (!expanded) {
         cardElement =
             <ListItem
@@ -100,9 +107,9 @@ function ListCard(props) {
                 sx={{
                     display: 'flex',
                     flexDirection: 'column',
-                    p: 1,
+                    // p: 1,
                     borderRadius: "10px",
-                    marginLeft: "1%",
+                    // marginLeft: "1%",
                     // border: "1px solid black",
                     marginBottom: "1%",
                     backgroundColor: "#e3f2fd",
@@ -138,11 +145,9 @@ function ListCard(props) {
                     sx={{
                         display: 'flex',
                         flexDirection: 'row',
-                        justifyContent: 'space-between',
                         width: '100%'
                     }}
                 >
-                    <div></div>
                     <Box
                         sx={{
                             p: 1,
@@ -157,12 +162,10 @@ function ListCard(props) {
                 <Box
                     sx={{
                         display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
+                        flexDirection: 'row-reverse',
                         width: '100%'
                     }}
                 >
-                    <div></div>
                     <Box sx={{ p: 1 }}>
                         <IconButton
                             onClick={handleExpansion}
@@ -183,9 +186,9 @@ function ListCard(props) {
                 sx={{
                     display: 'flex',
                     flexDirection: 'column',
-                    p: 1,
+                    // p: 1,
                     borderRadius: "10px",
-                    marginLeft: "1%",
+                    // marginLeft: "1%",
                     // border: "1px solid black",
                     marginBottom: "1%",
                     backgroundColor: "#e3f2fd",
@@ -218,17 +221,31 @@ function ListCard(props) {
                 </Box>
 
                 {/* Right here we have to display the songs within this list */}
-                
+                <ListItem>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            width: '100%'
+                        }}
+                    >
+                        <Box sx={{
+                            p: 1,
+                            flexGrow: 1,
+                        }}>
+                            <SongComponent listId={idNamePair._id} />
+                        </Box>
+                    </Box>
+                </ListItem>
+
 
                 <Box
                     sx={{
                         display: 'flex',
                         flexDirection: 'row',
-                        justifyContent: 'space-between',
                         width: '100%'
                     }}
                 >
-                    <div></div>
                     <Box
                         sx={{
                             p: 1,
@@ -248,7 +265,18 @@ function ListCard(props) {
                         width: '100%'
                     }}
                 >
-                    <div></div>
+                    <Box sx={{ p: 1 }}>
+                        <Button
+                            color="primary"
+                            variant="outlined"
+                            onClick={handleEdit}
+                            sx={{
+                                backgroundColor: "#e3f2fd",
+                            }}
+                        >
+                            {'Edit'}
+                        </Button>
+                    </Box>
                     <Box sx={{ p: 1 }}>
                         <IconButton
                             onClick={handleExpansion}

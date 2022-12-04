@@ -35,7 +35,8 @@ function Statusbar() {
     }
     else {
         return (
-            <></>
+            <div>
+            </div>
         );
     }
 }

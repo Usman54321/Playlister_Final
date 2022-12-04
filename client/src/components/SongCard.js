@@ -3,7 +3,7 @@ import { GlobalStoreContext } from '../store'
 
 function SongCard(props) {
     const { store } = useContext(GlobalStoreContext);
-    const [ draggedTo, setDraggedTo ] = useState(0);
+    const [draggedTo, setDraggedTo] = useState(0);
     const { song, index } = props;
 
     function handleDragStart(event) {

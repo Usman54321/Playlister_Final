@@ -14,18 +14,19 @@ import Statusbar from './Statusbar'
 import WorkspaceScreen from './WorkspaceScreen'
 import CommunityView from './CommunityView'
 import UserView from './UserView'
+import EditPlaylistView from './EditPlaylistView'
 /*
     This serves as a module so that we can import
     all the other components as we wish.
     
     @author McKilla Gorilla
 */
-export { 
-    AppBanner,  
-    EditToolbar, 
+export {
+    AppBanner,
+    EditToolbar,
     HomeScreen,
     HomeWrapper,
-    ListCard, 
+    ListCard,
     LoginScreen,
     MUIDeleteModal,
     MUIEditSongModal,
@@ -33,8 +34,9 @@ export {
     SongCard,
     RegisterScreen,
     SplashScreen,
-    Statusbar, 
+    Statusbar,
     WorkspaceScreen,
     CommunityView,
-    UserView
+    UserView,
+    EditPlaylistView
 }
