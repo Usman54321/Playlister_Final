@@ -157,11 +157,6 @@ function AuthContextProvider(props) {
         history.push("/");
     }
 
-    auth.getNameGivenEmail = function (email) {
-        const response = api.getNameGivenEmail(email);
-        return response;
-    }
-
     return (
         <AuthContext.Provider value={{
             auth

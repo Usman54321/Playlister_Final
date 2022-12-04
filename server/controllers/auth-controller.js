@@ -23,8 +23,6 @@ getLoggedIn = async (req, res) => {
                 lastName: loggedInUser.lastName,
                 email: loggedInUser.email,
                 userName: loggedInUser.userName,
-                likedPlaylists: loggedInUser.likedPlaylists,
-                dislikedPlaylists: loggedInUser.dislikedPlaylists,
             }
         })
     } catch (err) {
@@ -80,8 +78,6 @@ loginUser = async (req, res) => {
                 lastName: existingUser.lastName,
                 email: existingUser.email,
                 userName: existingUser.userName,
-                likedPlaylists: existingUser.likedPlaylists,
-                dislikedPlaylists: existingUser.dislikedPlaylists,
             }
         })
 
@@ -152,7 +148,7 @@ registerUser = async (req, res) => {
         //console.log("passwordHash: " + passwordHash);
 
         const newUser = new User({
-            firstName, lastName, email, userName, passwordHash, likedPlaylists: [], dislikedPlaylists: [], playlists: []
+            firstName, lastName, email, userName, passwordHash, playlists: []
         });
 
         const savedUser = await newUser.save();
@@ -173,8 +169,6 @@ registerUser = async (req, res) => {
                 lastName: savedUser.lastName,
                 email: savedUser.email,
                 userName: savedUser.userName,
-                likedPlaylists: savedUser.likedPlaylists,
-                dislikedPlaylists: savedUser.dislikedPlaylists,
             }
         })
 

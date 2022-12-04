@@ -41,12 +41,12 @@ export const registerUser = (firstName, lastName, email, userName, password, pas
         passwordVerify : passwordVerify
     })
 }
+
 const apis = {
     getLoggedIn,
     registerUser,
     loginUser,
     logoutUser,
-
 }
 
 export default apis

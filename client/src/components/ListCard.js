@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { GlobalStoreContext } from '../store'
 import AuthContext from '../auth';
 import Box from '@mui/material/Box';
@@ -22,13 +22,44 @@ import SongComponent from './SongComponent';
 */
 function ListCard(props) {
     const { store } = useContext(GlobalStoreContext);
-    const { idNamePair, selected, likes, dislikes, author } = props;
+    const { idNamePair, author } = props;
     const [expanded, setExpanded] = useState(false);
     const { auth } = useContext(AuthContext);
+    const [likes, setLikes] = useState([]);
+    const [dislikes, setDislikes] = useState([]);
+    const [isLoading, setLoading] = useState(true);
+
+    async function updateLikesAndDislikes() {
+        store.getPlaylistById(idNamePair._id).then(
+            (playlist) => {
+                console.log("playlist: ", JSON.stringify(playlist, null, 3));
+                setLikes(playlist.likes)
+                setDislikes(playlist.dislikes)
+            }
+        )
+    }
+
+    useEffect(() => {
+        if (isLoading) {
+            console.log("loading likes and dislikes");
+            updateLikesAndDislikes().then(
+                () => {
+                    setLoading(false);
+                }
+            )
+        }
+    }, [isLoading]);
+
 
     let icon = <KeyboardDoubleArrowDownIcon
         style={{ fontSize: '24pt' }}
     />;
+
+    let likesNum;
+    let dislikesNum;
+
+    likesNum = isLoading ? "Loading..." : likes.length;
+    dislikesNum = isLoading ? "Loading..." : dislikes.length;
 
     if (expanded) {
         icon = <KeyboardDoubleArrowUpIcon
@@ -56,6 +87,17 @@ function ListCard(props) {
         }
     }
 
+    let likeColor = "black";
+    let dislikeColor = "black";
+    if (auth.user) {
+        if (likes.includes(auth.user.userName)) {
+            likeColor = "primary";
+        }
+        if (dislikes.includes(auth.user.userName)) {
+            dislikeColor = "primary";
+        }
+    }
+
     function handleEdit(event) {
         event.stopPropagation();
         store.editPlaylist(idNamePair._id);
@@ -63,8 +105,21 @@ function ListCard(props) {
 
     function handleLike(event) {
         event.stopPropagation();
+        store.likePlaylist(idNamePair._id, auth.user.userName).then(
+            () => {
+                setLoading(true)
+            }
+        );
     }
 
+    function handleDislike(event) {
+        event.stopPropagation();
+        store.dislikePlaylist(idNamePair._id, auth.user.userName).then(
+            () => {
+                setLoading(true)
+            }
+        );
+    }
 
     let cardElement;
 
@@ -105,7 +160,7 @@ function ListCard(props) {
                 </Button>
             </Box>
     }
-    // This is the expanded view of the list card
+
     cardElement =
         <ListItem
             id={idNamePair._id}
@@ -113,10 +168,7 @@ function ListCard(props) {
             sx={{
                 display: 'flex',
                 flexDirection: 'column',
-                // p: 1,
                 borderRadius: "10px",
-                // marginLeft: "1%",
-                // border: "1px solid black",
                 marginBottom: "1%",
                 backgroundColor: "#e3f2fd",
             }}
@@ -143,20 +195,22 @@ function ListCard(props) {
                 </Box>
                 <Button
                     sx={{
-                        color: 'black'
+                        color: likeColor,
                     }}
+                    onClick={handleLike}
                 >
                     <ThumbUpIcon sx={{ p: 1 }} />
                 </Button>
-                {likes}
+                {likesNum}
                 <Button
                     sx={{
-                        color: 'black'
+                        color: dislikeColor,
                     }}
+                    onClick={handleDislike}
                 >
                     <ThumbDownIcon sx={{ p: 1 }} />
                 </Button>
-                {dislikes}
+                {dislikesNum}
             </Box>
 
             {/* Right here we have to display the songs within this list */}
