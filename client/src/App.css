@@ -192,8 +192,9 @@ body {
 
 .unselected-list-card:hover {
   cursor: pointer;
-  background-color: var(--swatch-contrast);
-  color: white;
+  /* background-color: var(--swatch-contrast); */
+  background-color: #e1f5fe;
+  color: black;
 }
 
 .selected-list-card {

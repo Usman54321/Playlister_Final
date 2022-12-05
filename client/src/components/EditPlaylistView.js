@@ -225,6 +225,9 @@ export default function EditPlaylistView() {
                                         color: "black",
                                         backgroundColor: "#e3f2fd",
                                         width: "100%",
+                                        '&:hover': {
+                                            backgroundColor: "#e1f5fe"
+                                        }
                                     }}
                                     onClick={handleAddSong}
                                 >

@@ -673,7 +673,7 @@ function GlobalStoreContextProvider(props) {
         let response = await api.getPlaylistById(id);
         if (response.data.success) {
             let playlist = response.data.playlist;
-            console.log("Playlist likes: " + playlist.likes.toString());
+            // console.log("Playlist likes: " + playlist.likes.toString());
 
             // If this user has disliked the playlist, remove them from the dislikes array
             if (playlist.dislikes.includes(userName)) {
@@ -682,17 +682,17 @@ function GlobalStoreContextProvider(props) {
             }
 
             if (playlist.likes.includes(userName)) {
-                console.log("User with username " + userName + " already liked this playlist");
+                // console.log("User with username " + userName + " already liked this playlist");
                 playlist.likes = playlist.likes.filter(user => user !== userName);
             }
             else {
-                console.log("User with username " + userName + " has not liked this playlist");
+                // console.log("User with username " + userName + " has not liked this playlist");
                 playlist.likes.push(userName);
             }
 
             response = await api.updatePlaylistById(playlist._id, playlist);
             if (response.data.success) {
-                console.log("Playlist likes: " + playlist.likes.toString());
+                // console.log("Playlist likes: " + playlist.likes.toString());
             }
         }
     }
@@ -701,7 +701,7 @@ function GlobalStoreContextProvider(props) {
         let response = await api.getPlaylistById(id);
         if (response.data.success) {
             let playlist = response.data.playlist;
-            console.log("Playlist dislikes: " + playlist.dislikes.toString());
+            // console.log("Playlist dislikes: " + playlist.dislikes.toString());
 
             // If this user has liked the playlist, remove them from the likes array
             if (playlist.likes.includes(userName)) {
@@ -710,17 +710,17 @@ function GlobalStoreContextProvider(props) {
             }
 
             if (playlist.dislikes.includes(userName)) {
-                console.log("User with username " + userName + " already disliked this playlist");
+                // console.log("User with username " + userName + " already disliked this playlist");
                 playlist.dislikes = playlist.dislikes.filter(user => user !== userName);
             }
             else {
-                console.log("User with username " + userName + " has not disliked this playlist");
+                // console.log("User with username " + userName + " has not disliked this playlist");
                 playlist.dislikes.push(userName);
             }
 
             response = await api.updatePlaylistById(playlist._id, playlist);
             if (response.data.success) {
-                console.log("Playlist dislikes: " + playlist.dislikes.toString());
+                // console.log("Playlist dislikes: " + playlist.dislikes.toString());
             }
         }
     }
