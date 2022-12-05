@@ -13,6 +13,9 @@ import { Fab, List, Typography, Box } from '@mui/material';
 
 import Navbar from './Navbar';
 import PlayerAndCommentWrapper from './PlayerAndCommentWrapper.js'
+import MUIEditSongModal from "./MUIEditSongModal"
+import MUIRemoveSongModal from "./MUIRemoveSongModal"
+
 /*
     This React component lists all the top5 lists in the UI.
     
@@ -47,6 +50,18 @@ const HomeScreen = () => {
                 }
             </List>;
     }
+
+    let modalJSX = "";
+    if (store.isEditSongModalOpen()) {
+        modalJSX = <MUIEditSongModal />;
+    }
+    else if (store.isRemoveSongModalOpen()) {
+        modalJSX = <MUIRemoveSongModal />;
+    }
+    else if (store.isDeleteListModalOpen()) {
+        modalJSX = <MUIDeleteModal />;
+    }
+
     return (
         <>
             <Navbar />
@@ -61,7 +76,7 @@ const HomeScreen = () => {
                 }}
             >
                 <div id="playlist-selector"
-                    style={{ height: "90%", width: "100%" }}
+                    style={{ height: "90%", width: "50%" }}
                 >
                     <div id="list-selector-list">
                         {listCard}
@@ -71,6 +86,7 @@ const HomeScreen = () => {
 
                 <PlayerAndCommentWrapper />
             </Box>
+            {modalJSX}
         </>
     );
 }

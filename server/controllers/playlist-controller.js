@@ -133,19 +133,19 @@ getPlaylistPairs = async (req, res) => {
                 else {
                     //console.log("Send the Playlist pairs");
                     // PUT ALL THE LISTS INTO ID, NAME PAIRS
-                    let pairs = [];
-                    for (let key in playlists) {
-                        let list = playlists[key];
-                        let pair = {
-                            _id: list._id,
-                            name: list.name,
-                            ownerUserName: list.ownerUserName,
-                            // likes: list.likes,
-                            // dislikes: list.dislikes
-                        };
-                        pairs.push(pair);
-                    }
-                    return res.status(200).json({ success: true, idNamePairs: pairs })
+                    // let pairs = [];
+                    // for (let key in playlists) {
+                    //     let list = playlists[key];
+                    //     let pair = {
+                    //         _id: list._id,
+                    //         name: list.name,
+                    //         ownerUserName: list.ownerUserName,
+                    //         // likes: list.likes,
+                    //         // dislikes: list.dislikes
+                    //     };
+                    //     pairs.push(pair);
+                    // }
+                    return res.status(200).json({ success: true, idNamePairs: playlists })
                 }
             }).catch(err => console.log("getPlaylistPairs error: " + err))
         }
@@ -167,8 +167,8 @@ getPlaylists = async (req, res) => {
 }
 updatePlaylist = async (req, res) => {
     const body = req.body
-    //console.log("updatePlaylist: " + JSON.stringify(body));
-    //console.log("req.body.name: " + req.body.name);
+    // console.log("updatePlaylist: " + JSON.stringify(body));
+    // console.log("req.body.name: " + req.body.playlist.name);
 
     if (!body) {
         return res.status(400).json({
@@ -178,7 +178,7 @@ updatePlaylist = async (req, res) => {
     }
 
     Playlist.findOne({ _id: req.params.id }, (err, playlist) => {
-        //console.log("playlist found: " + JSON.stringify(playlist));
+        // console.log("playlist found: " + JSON.stringify(playlist));
         if (err) {
             return res.status(404).json({
                 err,
@@ -199,6 +199,7 @@ updatePlaylist = async (req, res) => {
                     list.songs = body.playlist.songs;
                     list.likes = body.playlist.likes;
                     list.dislikes = body.playlist.dislikes;
+                    list.comments = body.playlist.comments;
                     list
                         .save()
                         .then(() => {
@@ -210,8 +211,7 @@ updatePlaylist = async (req, res) => {
                             })
                         })
                         .catch(error => {
-                            console.log("updatePlaylist error: " + error);
-                            console.log("FAILURE: " + JSON.stringify(error));
+                            console.log("FAILURE: " + JSON.stringify(error, null, 3));
                             return res.status(404).json({
                                 error,
                                 message: 'Playlist not updated!',

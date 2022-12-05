@@ -11,8 +11,10 @@ import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import { Button } from '@mui/material';
 import TextField from "@mui/material/TextField"
 
-import SongComponent from './SongComponent';
-
+import SongCard from './SongCard';
+import List from '@mui/material/List';
+import AddIcon from '@mui/icons-material/Add';
+import Typography from '@mui/material/Typography';
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -53,25 +55,18 @@ function ListCard(props) {
         }
     }, [isLoading]);
 
-
-    let icon = <KeyboardDoubleArrowDownIcon
-        style={{ fontSize: '24pt' }}
-    />;
-
-    let likesNum;
-    let dislikesNum;
-
-    likesNum = isLoading ? "Loading..." : likes.length;
-    dislikesNum = isLoading ? "Loading..." : dislikes.length;
-
-    if (expanded) {
-        icon = <KeyboardDoubleArrowUpIcon
-            style={{ fontSize: '24pt' }}
-        />;
-    }
+    let isCurrentList = false
+    if (store && store.currentList)
+        isCurrentList = store.currentList._id === idNamePair._id;
+    else if (store && store.currentList && expanded)
+        setExpanded(false);
 
     function handleExpansion(event) {
-        event.stopPropagation();
+        if (expanded && isCurrentList) {
+            event.stopPropagation();
+            store.closeCurrentList();
+        }
+        // event.stopPropagation();
         console.log("Expanded Listcard " + idNamePair._id + " to " + !expanded);
         setExpanded(!expanded);
     }
@@ -88,28 +83,17 @@ function ListCard(props) {
             if (_id.indexOf('list-card-text-') >= 0)
                 _id = ("" + _id).substring("list-card-text-".length);
 
-            //console.log("load " + event.target.id);
+            console.log("load " + event.target.id);
 
             // CHANGE THE CURRENT LIST
             store.setCurrentList(id);
         }
     }
 
-    let likeColor = "black";
-    let dislikeColor = "black";
-    if (auth.user) {
-        if (likes.includes(auth.user.userName)) {
-            likeColor = "primary";
-        }
-        if (dislikes.includes(auth.user.userName)) {
-            dislikeColor = "primary";
-        }
-    }
-
-    function handleEdit(event) {
-        event.stopPropagation();
-        store.editPlaylist(idNamePair._id);
-    }
+    // function handleEdit(event) {
+    //     event.stopPropagation();
+    //     store.editPlaylist(idNamePair._id);
+    // }
 
     function handleLike(event) {
         event.stopPropagation();
@@ -128,12 +112,6 @@ function ListCard(props) {
             }
         );
     }
-
-    let cardElement;
-
-    let expandedSongs = <></>
-    let expandedButtons = <div></div>
-
 
     function handleToggleEdit(event) {
         event.stopPropagation();
@@ -159,6 +137,128 @@ function ListCard(props) {
         setText(event.target.value);
     }
 
+    function handleAddSong(event) {
+        event.stopPropagation();
+        event.preventDefault();
+        store.addNewSong(idNamePair._id);
+    }
+
+    function handleUndo(event) {
+        event.stopPropagation();
+        store.undo();
+    }
+
+    function handleRedo(event) {
+        event.stopPropagation();
+        store.redo();
+    }
+
+    function handleDelete(event) {
+        event.stopPropagation();
+        store.markListForDeletion(idNamePair._id);
+    }
+
+    function handlePublish(event) {
+        event.stopPropagation();
+        console.log("To be implemented");
+    }
+
+    function handleDuplicate(event) {
+        event.stopPropagation();
+        console.log("To be implemented");
+    }
+
+    let icon = <KeyboardDoubleArrowDownIcon
+        style={{ fontSize: '24pt' }}
+    />;
+
+    let likesNum;
+    let dislikesNum;
+
+    likesNum = isLoading ? "Loading..." : likes.length;
+    dislikesNum = isLoading ? "Loading..." : dislikes.length;
+
+    if (expanded && isCurrentList) {
+        icon = <KeyboardDoubleArrowUpIcon
+            style={{ fontSize: '24pt' }}
+        />;
+    }
+
+    let likeColor = "black";
+    let dislikeColor = "black";
+    if (auth.user) {
+        if (likes.includes(auth.user.userName)) {
+            likeColor = "primary";
+        }
+        if (dislikes.includes(auth.user.userName)) {
+            dislikeColor = "primary";
+        }
+    }
+
+    let publishedLikesAndDislikes = <></>
+    if (idNamePair.published !== "None") {
+        publishedLikesAndDislikes = <>
+            <Button
+                sx={{
+                    color: likeColor,
+                }}
+                onClick={handleLike}
+            >
+                <ThumbUpIcon sx={{ p: 1 }} />
+            </Button>
+            {likesNum}
+            <Button
+                sx={{
+                    color: dislikeColor,
+                }}
+                onClick={handleDislike}
+            >
+                <ThumbDownIcon sx={{ p: 1 }} />
+            </Button>
+            {dislikesNum}
+        </>
+    }
+
+    let publishedText = <></>
+    if (idNamePair.published !== "None") {
+        let date = new Date(idNamePair.published).toDateString();
+        date = date.split(" ")
+        date = date[1] + " " + date[2] + ", " + date[3];
+        let views = idNamePair.views;
+        publishedText = <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                width: '100%',
+            }}
+        >
+            <Typography
+                sx={{
+                    fontSize: '10pt',
+                    color: 'grey',
+                }}
+            >
+                {'Published: ' + date}
+            </Typography>
+            <Typography
+                sx={{
+                    fontSize: '10pt',
+                    color: 'grey',
+                }}
+            >
+                {'Views: ' + views}
+            </Typography>
+        </Box>
+    }
+
+    let cardElement;
+
+    let expandedSongs = <></>
+    let expandedButtons = <></>
+
+
     let editView = <></>;
 
 
@@ -182,38 +282,140 @@ function ListCard(props) {
         return editView;
     }
 
-    if (expanded) {
+    if (expanded && isCurrentList) {
         expandedSongs =
-            <ListItem>
-                <Box
+            <Box
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    maxHeight: "408px",
+                    width: "100%",
+                    marginTop: "2%",
+                }}
+            >
+                <List
+                    id="playlist-cards"
                     sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        width: '100%'
+                        width: '98%',
+                        bgcolor: '#b1bfca',
+                        left: '1%',
+                        borderRadius: "10px",
+                        overflowY: 'auto',
                     }}
                 >
-                    <Box sx={{
-                        p: 1,
-                        flexGrow: 1,
-                    }}>
-                        <SongComponent listId={idNamePair._id} />
-                    </Box>
-                </Box>
-            </ListItem >
+                    {
+                        idNamePair.songs.map((song, index) => (
+                            <SongCard
+                                id={'playlist-song-' + (index)}
+                                key={'playlist-song-' + (index)}
+                                index={index}
+                                song={song}
+                            />
+                        ))
+                    }
+                    {/* We need a + button to add a new Song */}
+                    <ListItem>
+                        <Box
+                            sx={{
+                                display: "flex",
+                                flexDirection: "row",
+                                justifyContent: "space-between",
+                                height: "100%",
+                                width: "100%",
+                                marginTop: "2%",
+                            }}
+                        >
+                            <Button
+                                sx={{
+                                    fontSize: "12pt",
+                                    fontWeight: "bold",
+                                    borderRadius: "10px",
+                                    color: "black",
+                                    backgroundColor: "#e3f2fd",
+                                    width: "100%",
+                                    '&:hover': {
+                                        backgroundColor: "#e1f5fe"
+                                    }
+                                }}
+                                onClick={handleAddSong}
+                            >
+                                <AddIcon />
+                            </Button>
+                        </Box>
+                    </ListItem>
+                </List>
+            </Box>
 
         expandedButtons =
-            <Box sx={{ p: 1 }}>
-                <Button
-                    color="primary"
-                    variant="outlined"
-                    onClick={handleEdit}
-                    sx={{
-                        backgroundColor: "#e3f2fd",
-                    }}
-                >
-                    {'Edit'}
-                </Button>
-            </Box>
+            <>
+                <Box sx={{
+                    p: 1,
+                    display: "flex",
+                    flexDirection: "row",
+                }}>
+                    <Button
+                        color="primary"
+                        variant="outlined"
+                        onClick={handleUndo}
+                        sx={{
+                            backgroundColor: "#e3f2fd",
+                            mr: "1.5%"
+                        }}
+                    >
+                        {'Undo'}
+                    </Button>
+                    <Button
+                        color="primary"
+                        variant="outlined"
+                        onClick={handleRedo}
+                        sx={{
+                            backgroundColor: "#e3f2fd",
+                        }}
+                    >
+                        {'Redo'}
+                    </Button>
+                </Box>
+
+                <Box sx={{
+                    p: 1,
+                    display: "flex",
+                    flexDirection: "row",
+                }}>
+                    <Button
+                        color="primary"
+                        variant="outlined"
+                        onClick={handleDelete}
+                        sx={{
+                            backgroundColor: "#e3f2fd",
+                            mr: "1.5%"
+                        }}
+                    >
+                        {'Delete'}
+                    </Button>
+                    <Button
+                        color="primary"
+                        variant="outlined"
+                        onClick={handlePublish}
+                        sx={{
+                            backgroundColor: "#e3f2fd",
+                        }}
+                    >
+                        {'Publish'}
+                    </Button>
+                    <Button
+                        color="primary"
+                        variant="outlined"
+                        onClick={handleDuplicate}
+                        sx={{
+                            backgroundColor: "#e3f2fd",
+                        }}
+                    >
+                        {'Duplicate'}
+                    </Button>
+
+                </Box>
+            </>
     }
 
     let cardColor = "#e3f2fd";
@@ -253,24 +455,7 @@ function ListCard(props) {
                 }}>
                     {idNamePair.name}
                 </Box>
-                <Button
-                    sx={{
-                        color: likeColor,
-                    }}
-                    onClick={handleLike}
-                >
-                    <ThumbUpIcon sx={{ p: 1 }} />
-                </Button>
-                {likesNum}
-                <Button
-                    sx={{
-                        color: dislikeColor,
-                    }}
-                    onClick={handleDislike}
-                >
-                    <ThumbDownIcon sx={{ p: 1 }} />
-                </Button>
-                {dislikesNum}
+                {publishedLikesAndDislikes}
             </Box>
 
             {/* Right here we have to display the songs within this list */}
@@ -304,14 +489,25 @@ function ListCard(props) {
                 }}
             >
                 {expandedButtons}
-                <Box sx={{ p: 1 }}>
-                    <IconButton
-                        onClick={handleExpansion}
-                        aria-label='expand'
-                    >
-                        {icon}
-                    </IconButton>
-                </Box>
+            </Box>
+
+            {publishedText}
+
+
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'flex-end',
+                    width: '100%'
+                }}
+            >
+                <IconButton
+                    onClick={handleExpansion}
+                    aria-label='expand'
+                >
+                    {icon}
+                </IconButton>
             </Box>
         </ListItem>
 

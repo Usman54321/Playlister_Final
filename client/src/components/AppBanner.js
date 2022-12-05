@@ -133,7 +133,6 @@ export default function AppBanner() {
                                 store.setPage("HOME");
                                 // console.log('Setting page to HOME');
                             }
-                            store.closeCurrentList();
                         }}
                         style={{ cursor: 'pointer' }}
                     />
