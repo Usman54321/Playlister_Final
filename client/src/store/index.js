@@ -758,6 +758,34 @@ function GlobalStoreContextProvider(props) {
         asyncAddComment(username, comment);
     }
 
+    store.duplicatePlaylist = (playlist, userName) => {
+        async function asyncDuplicatePlaylist(playlist, username) {
+            let playlistName = playlist.name;
+            // Make sure the playlistName is uniquely named
+            // We do this by appending a number to the end of the playlist name
+            let num = 1;
+            // While it's present in idNamePairs, keep incrementing num
+            while (store.idNamePairs.some(pair => pair.name === playlistName)) {
+                playlistName = playlist.name + "" + num;
+                num++;
+            }
+            let playlistSongs = playlist.songs;
+            let response = await api.createPlaylist(playlistName, playlistSongs, username);
+            if (response.status === 201) {
+                tps.clearAllTransactions();
+                response = await api.getPlaylistPairs();
+                if (response.data.success) {
+                    let pairsArray = response.data.idNamePairs;
+                    storeReducer({
+                        type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                        payload: pairsArray
+                    });
+                }
+            }
+        }
+        asyncDuplicatePlaylist(playlist, userName);
+    }
+
     return (
         <GlobalStoreContext.Provider value={{
             store

@@ -44,7 +44,12 @@ export default function PlayerAndCommentWrapper() {
         console.log("No songs in playlist");
         currentYTID = null;
         index = "";
-    } else {
+    }
+    else if (songs && !currentSong) {
+        // You try to find a current song by resetting the index to 0
+        setCurrentIndex(0);
+    }
+    else {
         currentYTID = currentSong.youTubeId;
         playlistName = store.currentList.name;
         songTitle = currentSong.title;

@@ -165,7 +165,7 @@ function ListCard(props) {
 
     function handleDuplicate(event) {
         event.stopPropagation();
-        console.log("To be implemented");
+        store.duplicatePlaylist(idNamePair, auth.user.userName);
     }
 
     let icon = <KeyboardDoubleArrowDownIcon
