@@ -39,7 +39,7 @@ export default function CommentSection() {
                     sx={{
                         display: "flex",
                         flexDirection: "column",
-                        width: "80%",
+                        width: "100%",
                     }}
                 >
                     {/* Put in the username and comments while making sure they wrap if they are too long */}
@@ -48,7 +48,7 @@ export default function CommentSection() {
                         sx={{
                             display: "flex",
                             flexDirection: "row",
-                            width: "80%",
+                            width: "100%",
                             wordBreak: "break-word",
                             fontSize: "20px",
                             borderBottom: "1px solid #b1bfca",
@@ -62,7 +62,7 @@ export default function CommentSection() {
                         sx={{
                             display: "flex",
                             flexDirection: "row",
-                            width: "80%",
+                            width: "100%",
                             wordBreak: "break-word",
                             fontSize: "16px",
                         }}
