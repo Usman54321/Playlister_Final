@@ -20,7 +20,7 @@ const playlistSchema = new Schema(
                 type: String
             }], required: true, default: []
         },
-        published: { type: Boolean, required: true },
+        published: { type: String, required: true },
         comments: {
             type: [{
                 userName: String,

@@ -9,6 +9,7 @@ import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import { Button } from '@mui/material';
+import TextField from "@mui/material/TextField"
 
 import SongComponent from './SongComponent';
 
@@ -23,11 +24,13 @@ import SongComponent from './SongComponent';
 function ListCard(props) {
     const { store } = useContext(GlobalStoreContext);
     const { idNamePair, author } = props;
-    const [expanded, setExpanded] = useState(false);
     const { auth } = useContext(AuthContext);
+    const [expanded, setExpanded] = useState(false);
     const [likes, setLikes] = useState([]);
     const [dislikes, setDislikes] = useState([]);
     const [isLoading, setLoading] = useState(true);
+    const [editActive, setEditActive] = useState(false);
+    const [text, setText] = useState("");
 
     async function updateLikesAndDislikes() {
         store.getPlaylistById(idNamePair._id).then(
@@ -74,6 +77,11 @@ function ListCard(props) {
     }
 
     function handleLoadList(event, id) {
+        if (event.detail === 2) {
+            handleToggleEdit(event);
+            return;
+        }
+
         //console.log("handleLoadList for " + id);
         if (!event.target.disabled) {
             let _id = event.target.id;
@@ -127,6 +135,53 @@ function ListCard(props) {
     let expandedButtons = <div></div>
 
 
+    function handleToggleEdit(event) {
+        event.stopPropagation();
+        toggleEdit();
+    }
+
+    function toggleEdit() {
+        let newActive = !editActive;
+        if (newActive) {
+            store.setIsListNameEditActive();
+        }
+        setEditActive(newActive);
+    }
+
+    function handleKeyPress(event) {
+        if (event.code === "Enter") {
+            let id = event.target.id.substring("list-".length);
+            store.changeListName(id, text);
+            toggleEdit();
+        }
+    }
+    function handleUpdateText(event) {
+        setText(event.target.value);
+    }
+
+    let editView = <></>;
+
+
+    if (editActive) {
+        editView = <TextField
+            margin="normal"
+            required
+            fullWidth
+            id={"list-" + idNamePair._id}
+            label="Playlist Name"
+            name="name"
+            autoComplete="Playlist Name"
+            className='list-card'
+            onKeyPress={handleKeyPress}
+            onChange={handleUpdateText}
+            defaultValue={idNamePair.name}
+            inputProps={{ style: { fontSize: 48 } }}
+            InputLabelProps={{ style: { fontSize: 24 } }}
+            autoFocus
+        />
+        return editView;
+    }
+
     if (expanded) {
         expandedSongs =
             <ListItem>
@@ -161,6 +216,11 @@ function ListCard(props) {
             </Box>
     }
 
+    let cardColor = "#e3f2fd";
+    if (store && store.currentList && store.currentList._id === idNamePair._id) {
+        cardColor = '#e0f2f1';
+    }
+
     cardElement =
         <ListItem
             id={idNamePair._id}
@@ -170,7 +230,7 @@ function ListCard(props) {
                 flexDirection: 'column',
                 borderRadius: "10px",
                 marginBottom: "1%",
-                backgroundColor: "#e3f2fd",
+                backgroundColor: cardColor,
             }}
             style={{ width: '98%', fontSize: '20pt' }}
             button
