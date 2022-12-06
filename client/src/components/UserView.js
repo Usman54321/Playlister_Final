@@ -41,17 +41,6 @@ const UserView = () => {
             </List>;
     }
 
-    // let modalJSX = "";
-    // if (store.isEditSongModalOpen()) {
-    //     modalJSX = <MUIEditSongModal />;
-    // }
-    // else if (store.isRemoveSongModalOpen()) {
-    //     modalJSX = <MUIRemoveSongModal />;
-    // }
-    // else if (store.isDeleteListModalOpen()) {
-    //     modalJSX = <MUIDeleteModal />;
-    // }
-
     return (
         <>
             <Navbar />

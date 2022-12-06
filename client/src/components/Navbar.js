@@ -57,7 +57,6 @@ export default function Navbar() {
                     onClick={() => {
                         if (store.currentPage !== "HOME" && auth.user) {
                             store.setPage("HOME");
-                            // history.push("/");
                         }
                         else if (!auth.user) {
                             store.setPage("COMMUNITY");

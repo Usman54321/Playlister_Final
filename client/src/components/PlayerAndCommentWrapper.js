@@ -1,6 +1,6 @@
 import YouTube from 'react-youtube';
 import CommentSection from './CommentSection';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { Box, Button, IconButton } from '@mui/material';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import StopSharpIcon from '@mui/icons-material/StopSharp';
@@ -14,6 +14,13 @@ export default function PlayerAndCommentWrapper() {
     const [currentView, setCurrentView] = useState("player");
     const [currentIndex, setCurrentIndex] = useState(0);
     const [YT, setYTPlayer] = useState(null);
+    const [list, setList] = useState(store.currentPlayingList);
+
+    useEffect(() => {
+        console.log("Setting list in PlayerAndCommentWrapper to: ", store.currentPlayingList);
+        setList(store.currentPlayingList);
+    }, [store.currentPlayingList]);
+
     let playerColor = currentView === "player" ? "white" : "#b1bfca";
     let commentColor = currentView === "comment" ? "white" : "#b1bfca";
 
@@ -49,7 +56,7 @@ export default function PlayerAndCommentWrapper() {
 
 
     let playerBody;
-    let songs = store.currentList ? store.currentList.songs : [];
+    let songs = list ? list.songs : [];
     let currentSong = songs ? songs[currentIndex] : null;
     let currentYTID;
     let playlistName = "";
@@ -68,7 +75,7 @@ export default function PlayerAndCommentWrapper() {
     }
     else {
         currentYTID = currentSong.youTubeId;
-        playlistName = store.currentList.name;
+        playlistName = list.name;
         songTitle = currentSong.title;
         songArtist = currentSong.artist;
     }

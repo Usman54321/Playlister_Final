@@ -51,7 +51,7 @@ function ListCard(props) {
 
     useEffect(() => {
         if (isLoading && idNamePair.published !== "None") {
-            console.log("loading likes and dislikes");
+            // console.log("loading likes and dislikes");
             updateLikesAndDislikes().then(
                 () => {
                     setLoading(false);
@@ -67,6 +67,16 @@ function ListCard(props) {
         setExpanded(false);
 
     function handleExpansion(event) {
+        event.stopPropagation();
+
+        if (store.currentPage === "HOME") {
+            store.setCurrentList(idNamePair._id);
+        }
+        else {
+            console.log(store.currentPage);
+            store.setCurrentListForCommunity(idNamePair._id);
+        }
+
         if (expanded && isCurrentList) {
             event.stopPropagation();
             store.closeCurrentList();
@@ -79,10 +89,10 @@ function ListCard(props) {
             store.viewPlaylist(idNamePair._id).then(
                 () => {
                     setExpanded(!expanded);
-                    return;
                 }
             )
             console.log("We are expanding a published playlist");
+            return;
         }
         setExpanded(!expanded);
     }
@@ -101,14 +111,8 @@ function ListCard(props) {
 
             console.log("load " + event.target.id);
 
-            // CHANGE THE CURRENT LIST
-            if (store.currentPage === "HOME") {
-                store.setCurrentList(id);
-            }
-            else {
-                console.log(store.currentPage);
-                store.setCurrentListForCommunity(id);
-            }
+            // Set this list to play
+            store.setPlayingList(id);
         }
     }
 
