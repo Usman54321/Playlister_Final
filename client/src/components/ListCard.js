@@ -16,6 +16,7 @@ import List from '@mui/material/List';
 import AddIcon from '@mui/icons-material/Add';
 import Typography from '@mui/material/Typography';
 import SongComponent from './SongComponent';
+import MUIRenameModal from './MUIRenameModal';
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -34,6 +35,8 @@ function ListCard(props) {
     const [isLoading, setLoading] = useState(true);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
+    const [modalView, setModalView] = useState(false);
+
 
     async function updateLikesAndDislikes() {
         if (idNamePair.published !== "None") {
@@ -154,11 +157,27 @@ function ListCard(props) {
 
     function handleKeyPress(event) {
         if (event.code === "Enter") {
-            let id = event.target.id.substring("list-".length);
-            store.changeListName(id, text);
-            toggleEdit();
+            // Go through store.idNamePairs to make sure that the name is unique
+            let unique = true;
+            for (const element of store.idNamePairs) {
+                if (element._id !== idNamePair._id) {
+                    if (element.name === text) {
+                        unique = false;
+                        break;
+                    }
+                }
+            }
+            if (unique) {
+                let id = event.target.id.substring("list-".length);
+                store.changeListName(id, text);
+                toggleEdit();
+            }
+            else {
+                setModalView(true);
+            }
         }
     }
+
     function handleUpdateText(event) {
         setText(event.target.value);
     }
@@ -193,6 +212,7 @@ function ListCard(props) {
         event.stopPropagation();
         store.duplicatePlaylist(idNamePair, auth.user.userName);
     }
+
 
     let icon = <KeyboardDoubleArrowDownIcon
         style={{ fontSize: '24pt' }}
@@ -292,22 +312,30 @@ function ListCard(props) {
 
 
     if (editActive) {
-        editView = <TextField
-            margin="normal"
-            required
-            fullWidth
-            id={"list-" + idNamePair._id}
-            label="Playlist Name"
-            name="name"
-            autoComplete="Playlist Name"
-            className='list-card'
-            onKeyPress={handleKeyPress}
-            onChange={handleUpdateText}
-            defaultValue={idNamePair.name}
-            inputProps={{ style: { fontSize: 48 } }}
-            InputLabelProps={{ style: { fontSize: 24 } }}
-            autoFocus
-        />
+        console.log("modalView: " + modalView)
+        editView =
+            <>
+                <MUIRenameModal
+                    displayVal={modalView}
+                    displayValSetter={setModalView}
+                />
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id={"list-" + idNamePair._id}
+                    label="Playlist Name"
+                    name="name"
+                    autoComplete="Playlist Name"
+                    className='list-card'
+                    onKeyPress={handleKeyPress}
+                    onChange={handleUpdateText}
+                    defaultValue={idNamePair.name}
+                    inputProps={{ style: { fontSize: 48 } }}
+                    InputLabelProps={{ style: { fontSize: 24 } }}
+                    autoFocus
+                />
+            </>
         return editView;
     }
 
@@ -463,6 +491,7 @@ function ListCard(props) {
                 </Box>
             </>
     }
+
     else if (expanded && isCurrentList && idNamePair.published !== "None") {
         expandedSongs =
             <ListItem>
