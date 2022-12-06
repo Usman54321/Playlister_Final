@@ -35,7 +35,7 @@ export default function PlayerAndCommentWrapper() {
                 }
             )
         }
-    }, [store.currentPlayingList, store.idNamePairs]);
+    }, [store.currentPlayingList, store.idNamePairs, store.currentPage]);
 
     let playerColor = currentView === "player" ? "white" : "#b1bfca";
     let commentColor = currentView === "comment" ? "white" : "#b1bfca";

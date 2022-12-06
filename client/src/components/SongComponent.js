@@ -18,7 +18,7 @@ export default function SongComponent(props) {
                     setList(data);
                     setLoading(false);
                 });
-            } else if (store.currentPage === "COMMUNITY") {
+            } else {
                 console.log("Loading community page SongComponent");
                 store.getPublicPlaylistByID(list_id).then((data) => {
                     let list = data.songs;
