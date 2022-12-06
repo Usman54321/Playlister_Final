@@ -73,6 +73,17 @@ function ListCard(props) {
         }
         // event.stopPropagation();
         console.log("Expanded Listcard " + idNamePair._id + " to " + !expanded);
+
+        // We are expanding a published playlist
+        if (!expanded && idNamePair.published !== "None") {
+            store.viewPlaylist(idNamePair._id).then(
+                () => {
+                    setExpanded(!expanded);
+                    return;
+                }
+            )
+            console.log("We are expanding a published playlist");
+        }
         setExpanded(!expanded);
     }
 

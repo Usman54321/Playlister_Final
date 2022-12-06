@@ -32,7 +32,7 @@ export const GlobalStoreActionType = {
     REMOVE_SONG: "REMOVE_SONG",
     HIDE_MODALS: "HIDE_MODALS",
     SET_PAGE: "SET_PAGE",
-    EDIT_PLAYLIST: "EDIT_PLAYLIST",
+    // EDIT_PLAYLIST: "EDIT_PLAYLIST",
     SET_SORT_TYPE: "SET_SORT_TYPE",
 }
 
@@ -60,7 +60,6 @@ const CurrentPage = {
     HOME: "HOME",
     COMMUNITY: "COMMUNITY",
     USER: "USER",
-    EDIT_LIST: "EDIT_LIST",
 }
 
 // WITH THIS WE'RE MAKING OUR GLOBAL DATA STORE
@@ -279,21 +278,21 @@ function GlobalStoreContextProvider(props) {
                 });
             }
 
-            case GlobalStoreActionType.EDIT_PLAYLIST: {
-                return setStore({
-                    currentModal: CurrentModal.NONE,
-                    currentPage: CurrentPage.EDIT_LIST,
-                    currentSort: store.currentSort,
-                    idNamePairs: store.idNamePairs,
-                    currentList: payload,
-                    currentSongIndex: -1,
-                    currentSong: null,
-                    newListCounter: store.newListCounter,
-                    listNameActive: false,
-                    listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null
-                });
-            }
+            // case GlobalStoreActionType.EDIT_PLAYLIST: {
+            //     return setStore({
+            //         currentModal: CurrentModal.NONE,
+            //         currentPage: CurrentPage.EDIT_LIST,
+            //         currentSort: store.currentSort,
+            //         idNamePairs: store.idNamePairs,
+            //         currentList: payload,
+            //         currentSongIndex: -1,
+            //         currentSong: null,
+            //         newListCounter: store.newListCounter,
+            //         listNameActive: false,
+            //         listIdMarkedForDeletion: null,
+            //         listMarkedForDeletion: null
+            //     });
+            // }
 
             case GlobalStoreActionType.SET_SORT_TYPE: {
                 return setStore({
@@ -728,24 +727,24 @@ function GlobalStoreContextProvider(props) {
         }
     }
 
-    store.editPlaylist = (id) => {
-        async function asyncEditPlaylist(id) {
-            let response = await api.getPlaylistById(id);
-            if (response.data.success) {
-                let playlist = response.data.playlist;
+    // store.editPlaylist = (id) => {
+    //     async function asyncEditPlaylist(id) {
+    //         let response = await api.getPlaylistById(id);
+    //         if (response.data.success) {
+    //             let playlist = response.data.playlist;
 
-                response = await api.updatePlaylistById(playlist._id, playlist);
-                if (response.data.success) {
-                    storeReducer({
-                        type: GlobalStoreActionType.EDIT_PLAYLIST,
-                        payload: playlist
-                    });
-                    history.push("/edit-playlist/" + id);
-                }
-            }
-        }
-        asyncEditPlaylist(id);
-    }
+    //             response = await api.updatePlaylistById(playlist._id, playlist);
+    //             if (response.data.success) {
+    //                 storeReducer({
+    //                     type: GlobalStoreActionType.EDIT_PLAYLIST,
+    //                     payload: playlist
+    //                 });
+    //                 history.push("/edit-playlist/" + id);
+    //             }
+    //         }
+    //     }
+    //     asyncEditPlaylist(id);
+    // }
 
     store.getSongsByPlaylistId = async (id) => {
         const response = await api.getPlaylistById(id);
@@ -862,6 +861,57 @@ function GlobalStoreContextProvider(props) {
                             storeReducer({
                                 type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
                                 payload: pairsArray
+                            });
+                        }
+                        else {
+                            console.log("API FAILED TO GET THE LIST PAIRS");
+                        }
+                    }
+                    asyncLoadCommunityIdNamePairs();
+                }
+            }
+        }
+    }
+
+    store.viewPlaylist = async (id) => {
+        let response = await api.getPublicPlaylistByID(id);
+        if (response.data.success) {
+            let playlist = response.data.playlist;
+            playlist.views = playlist.views + 1;
+            response = await api.updatePublicFeatures(playlist._id, playlist);
+            if (response.data.success) {
+                // Now we need to map playlist pairs again
+                if (store.currentPage === CurrentPage.HOME) {
+                    async function asyncLoadIdNamePairs() {
+                        const response = await api.getPlaylistPairs();
+                        if (response.data.success) {
+                            let pairsArray = response.data.idNamePairs;
+                            // let currentList = pairsArray.filter(pair => pair._id === id);
+                            storeReducer({
+                                type: GlobalStoreActionType.CHANGE_LIST_NAME,
+                                payload: {
+                                    idNamePairs: pairsArray,
+                                    playlist: playlist,
+                                }
+                            });
+                        }
+                        else {
+                            console.log("API FAILED TO GET THE LIST PAIRS");
+                        }
+                    }
+                    asyncLoadIdNamePairs();
+                }
+                else if (store.currentPage === CurrentPage.COMMUNITY) {
+                    async function asyncLoadCommunityIdNamePairs() {
+                        const response = await api.getPlaylistPairsForCommunity();
+                        if (response.data.success) {
+                            let pairsArray = response.data.idNamePairs;
+                            storeReducer({
+                                type: GlobalStoreActionType.CHANGE_LIST_NAME,
+                                payload: {
+                                    idNamePairs: pairsArray,
+                                    playlist: playlist,
+                                }
                             });
                         }
                         else {
