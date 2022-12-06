@@ -22,6 +22,7 @@ export default function PlayerAndCommentWrapper() {
                 (playlist) => {
                     console.log("Playlist: ", playlist)
                     setList(playlist);
+                    setCurrentIndex(0);
                 }
             )
         }
@@ -30,6 +31,7 @@ export default function PlayerAndCommentWrapper() {
                 (playlist) => {
                     console.log("Playlist: ", playlist)
                     setList(playlist);
+                    setCurrentIndex(0);
                 }
             )
         }
