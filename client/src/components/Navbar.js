@@ -1,19 +1,16 @@
 import { FormControl, IconButton, Select, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-// import HomeIcon from '@mui/icons-material/Home';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import SearchBar from "./SearchBar";
 import { useContext } from "react";
 import { GlobalStoreContext } from "../store";
-// import { useHistory } from "react-router-dom";
 import AuthContext from "../auth";
 
 export default function Navbar() {
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
-    // const history = useHistory();
 
     let handleSortChange = (event) => {
         store.setSortType(event.target.value);

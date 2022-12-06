@@ -1,22 +1,6 @@
-// export default function UserView() {
-//     return <></>
-// }
-
-
-// export default function CommunityView() {
-//     return <></>
-// }
-
 import React, { useContext, useEffect } from 'react'
 import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
-
-// import AddIcon from '@mui/icons-material/Add';
-// import Fab from '@mui/material/Fab'
-// import List from '@mui/material/List';
-// import Typography from '@mui/material/Typography'
-// import Box from '@mui/material/Box'
-
 import { List, Box } from '@mui/material';
 
 import Navbar from './Navbar';

@@ -3,13 +3,7 @@ import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
 
-// import AddIcon from '@mui/icons-material/Add';
-// import Fab from '@mui/material/Fab'
-// import List from '@mui/material/List';
-// import Typography from '@mui/material/Typography'
-// import Box from '@mui/material/Box'
-
-import { Fab, List, Typography, Box } from '@mui/material';
+import { List, Box } from '@mui/material';
 
 import Navbar from './Navbar';
 import PlayerAndCommentWrapper from './PlayerAndCommentWrapper.js'
@@ -34,8 +28,6 @@ const HomeScreen = () => {
             <List
                 sx={{
                     width: '100%',
-                    // left: '5%',
-                    // bgcolor: 'background.paper',
                     bgcolor: 'transparent',
                     borderRadius: "10px",
                 }}>
