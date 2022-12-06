@@ -7,33 +7,32 @@ import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import SearchBar from "./SearchBar";
 import { useContext } from "react";
 import { GlobalStoreContext } from "../store";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
+import AuthContext from "../auth";
 
 export default function Navbar() {
     const { store } = useContext(GlobalStoreContext);
-    const history = useHistory();
+    const { auth } = useContext(AuthContext);
+    // const history = useHistory();
 
     let handleSortChange = (event) => {
-        // Change store.sortType to the new value
         store.setSortType(event.target.value);
     }
 
     let sortOptions = <>
-        <option value="name">Name</option>
-        <option value="likes">Likes</option>
-        <option value="dislikes">Dislikes</option>
-        <option value="listens">Listens</option>
+        <option value="creationDate">Creation Date (Old-New)</option>
+        <option value="lastEditDate">Last Edit Date (New-Old)</option>
+        <option value="name">Name (A-Z)</option>
     </>
 
-    if (store.currentPage === "HOME") {
-        sortOptions = <>
-            <option value="name">Name</option>
-            <option value="likes">Likes</option>
-            <option value="dislikes">Dislikes</option>
-            <option value="listens">Listens</option>
-            <option value="last_edited">Last Edited</option>
-            <option value="published">Published</option>
-        </>
+    let expandedSortOptions = <></>
+    if (store.currentPage === "COMMUNITY") {
+        expandedSortOptions =
+            <>
+                <option value="likes">Likes (High - Low)</option>
+                <option value="dislikes">Dislikes (High - Low) </option>
+                <option value="publishedDate">Published Date (New-Old)</option>
+            </>
     }
 
     return (
@@ -59,9 +58,12 @@ export default function Navbar() {
                     size="large"
                     style={{ textDecration: 'none', color: 'black' }}
                     onClick={() => {
-                        if (store.currentPage !== "HOME") {
+                        if (store.currentPage !== "HOME" && auth.user) {
                             store.setPage("HOME");
                             // history.push("/");
+                        }
+                        else if (!auth.user) {
+                            store.setPage("COMMUNITY");
                         }
                         else {
                             store.closeCurrentList();
@@ -77,7 +79,7 @@ export default function Navbar() {
                     onClick={() => {
                         if (store.currentPage !== "COMMUNITY") {
                             store.setPage("COMMUNITY");
-                            history.push("/community-lists");
+                            // history.push("/community-lists");
                         }
                     }}
                 >
@@ -92,7 +94,7 @@ export default function Navbar() {
                     onClick={() => {
                         if (store.currentPage !== "USER") {
                             store.setPage("USER");
-                            history.push("/user-lists");
+                            // history.push("/user-lists");
                         }
                     }}
                 >
@@ -130,6 +132,7 @@ export default function Navbar() {
                         onChange={handleSortChange}
                     >
                         {sortOptions}
+                        {expandedSortOptions}
                     </Select>
                 </FormControl>
             </Box>
