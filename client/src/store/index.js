@@ -1019,13 +1019,17 @@ function GlobalStoreContextProvider(props) {
         if (sortType === SortType.CREATION_DATE) {
             // Sort by creation date oldest to newest
             sortedPairsArray = lists.sort((a, b) => {
-                return a.creationDate - b.creationDate;
+                let aDate = new Date(a.createdAt);
+                let bDate = new Date(b.createdAt);
+                return aDate - bDate;
             });
         }
         else if (sortType === SortType.LAST_EDIT_DATE) {
             // Sort by last edit date newest to oldest
             sortedPairsArray = lists.sort((a, b) => {
-                return b.lastEditDate - a.lastEditDate;
+                let aDate = new Date(a.updatedAt);
+                let bDate = new Date(b.updatedAt);
+                return bDate - aDate;
             });
         }
         else if (sortType === SortType.NAME) {
