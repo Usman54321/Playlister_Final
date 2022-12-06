@@ -681,6 +681,25 @@ function GlobalStoreContextProvider(props) {
             }
             asyncLoadCommunityIdNamePairs();
         }
+        else if (store.currentPage === CurrentPage.USER) {
+            async function asyncLoadCommunityIdNamePairs() {
+                const response = await api.getPlaylistPairsForCommunity();
+                if (response.data.success) {
+                    let pairsArray = response.data.idNamePairs;
+                    let sorted = store.sortHelper(pairsArray, store.currentSort);
+                    let filteredPairsArray = sorted.filter(pair =>
+                        pair.ownerUserName.toLowerCase() === query.toLowerCase());
+                    storeReducer({
+                        type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                        payload: filteredPairsArray
+                    });
+                }
+                else {
+                    console.log("API FAILED TO GET THE LIST PAIRS");
+                }
+            }
+            asyncLoadCommunityIdNamePairs();
+        }
     }
 
     store.setPage = (page) => {
@@ -967,7 +986,6 @@ function GlobalStoreContextProvider(props) {
         asyncSetCurrentList(id);
     }
 
-
     store.getPublicPlaylistByID = async (id) => {
         let response = await api.getPublicPlaylistByID(id);
         if (response.data.success) {
@@ -1063,6 +1081,13 @@ function GlobalStoreContextProvider(props) {
             console.log("Invalid sort type");
         }
         return sortedPairsArray;
+    }
+
+    store.clearIDNamePairs = () => {
+        storeReducer({
+            type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+            payload: []
+        });
     }
 
 

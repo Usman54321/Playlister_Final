@@ -22,7 +22,7 @@ import PlayerAndCommentWrapper from './PlayerAndCommentWrapper.js'
     
     @author McKilla Gorilla
 */
-const HomeScreen = () => {
+const CommunityView = () => {
     const { store } = useContext(GlobalStoreContext);
 
     useEffect(() => {
@@ -90,4 +90,4 @@ const HomeScreen = () => {
     );
 }
 
-export default HomeScreen;
+export default CommunityView;
