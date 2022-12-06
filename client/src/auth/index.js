@@ -154,7 +154,7 @@ function AuthContextProvider(props) {
             type: AuthActionType.LOGIN_USER,
             payload: { user: null }
         })
-        history.push("/");
+        // history.push("/community-lists");
     }
 
     return (

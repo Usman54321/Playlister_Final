@@ -7,12 +7,13 @@ import Box from "@mui/material/Box";
 import InputBase from "@mui/material/InputBase";
 import AuthContext from "../auth";
 
-export default function CommentSection() {
+export default function CommentSection(props) {
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
     const [comment, setComment] = useState("");
+    const displayVal = props.display;
 
-
+    
     let list = [];
     if (store && store.currentList) {
         list = store.currentList;
@@ -77,11 +78,12 @@ export default function CommentSection() {
     let commentSection = (
         <Box
             sx={{
-                display: "flex",
+                // display: "flex",
                 flexDirection: "column",
                 width: "100%",
                 height: "90%",
                 justifyContent: "space-between",
+                display: displayVal,
             }}
         >
             <List
@@ -109,6 +111,8 @@ export default function CommentSection() {
                         e.target.value = "";
                     }
                 }}
+                // Prevent you from typing if you are not logged in
+                disabled={!auth.user}
             />
         </Box >
     );

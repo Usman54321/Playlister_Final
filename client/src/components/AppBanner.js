@@ -64,6 +64,7 @@ export default function AppBanner() {
                 <MenuItem
                     onClick={() => {
                         auth.loginAsGuest();
+                        store.setPage("COMMUNITY");
                     }}
                 >
                     Continue As Guest
@@ -129,9 +130,12 @@ export default function AppBanner() {
                         alt="Playlister Logo"
                         height={"50px"}
                         onClick={() => {
-                            if (auth && store && auth.loggedIn && store.currentPage !== "HOME") {
+                            if (auth && store && auth.user && store.currentPage !== "HOME") {
                                 store.setPage("HOME");
                                 // console.log('Setting page to HOME');
+                            } else if (auth && store && !auth.user && auth.loggedIn) {
+                                // We are in Guest mode
+                                store.setPage("COMMUNITY");
                             }
                         }}
                         style={{ cursor: 'pointer' }}

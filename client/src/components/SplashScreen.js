@@ -1,9 +1,13 @@
 import { Box, Button, Typography } from "@mui/material";
 import AuthContext from "../auth";
 import { useContext } from "react";
+import GlobalStoreContext from "../store";
 
 export default function SplashScreen() {
     const { auth } = useContext(AuthContext);
+    const { store } = useContext(GlobalStoreContext);
+
+
     return (
         <div id="splash-screen">
             <Box
@@ -37,6 +41,7 @@ export default function SplashScreen() {
                     <Button variant="contained" color="primary" sx={{ width: '100%', cursor: 'pointer' }}
                         onClick={() => {
                             auth.loginAsGuest();
+                            store.setPage("COMMUNITY");
                         }}
                     >
                         {'Continue As Guest'}

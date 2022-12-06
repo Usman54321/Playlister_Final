@@ -1,6 +1,6 @@
 import YouTube from 'react-youtube';
 import CommentSection from './CommentSection';
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import { Box, Button, IconButton } from '@mui/material';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import StopSharpIcon from '@mui/icons-material/StopSharp';
@@ -10,24 +10,41 @@ import GlobalStoreContext from '../store';
 
 
 export default function PlayerAndCommentWrapper() {
+    const { store } = useContext(GlobalStoreContext);
     const [currentView, setCurrentView] = useState("player");
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [YT, setYTPlayer] = useState(null);
     let playerColor = currentView === "player" ? "white" : "#b1bfca";
     let commentColor = currentView === "comment" ? "white" : "#b1bfca";
-    const { store } = useContext(GlobalStoreContext);
 
-    let YT = null;
     let _onReady = (event) => {
         // access to player in all event handlers via event.target
-        YT = event.target;
+        setYTPlayer(event.target);
+        console.log("Setting YT to: ", YT);
     }
 
+    let _onStateChange = (event) => {
+        // If the video has ended, play the next video
+        if (event.data === 0) {
+            console.log("Video has ended");
+            if (currentIndex < songs.length - 1) {
+                setCurrentIndex(currentIndex + 1);
+                // YT.playVideo();
+            }
+        }
+    }
+
+
     let handleStop = () => {
-        YT.stopVideo();
+        console.log("YT: ", YT);
+        if (YT)
+            YT.pauseVideo();
     }
 
     let handlePlay = () => {
-        YT.playVideo();
+        console.log("YT: ", YT);
+        if (YT)
+            YT.playVideo();
     }
 
 
@@ -41,7 +58,7 @@ export default function PlayerAndCommentWrapper() {
     let index = currentIndex + 1;
 
     if (songs.length === 0 && currentSong === undefined) {
-        console.log("No songs in playlist");
+        // console.log("No songs in playlist");
         currentYTID = null;
         index = "";
     }
@@ -76,13 +93,26 @@ export default function PlayerAndCommentWrapper() {
                 opts={{
                     width: '80%',
                     height: '360px',
+                    playerVars: {
+                        autoplay: 1,
+                    },
                 }}
                 onReady={_onReady}
+                onStateChange={_onStateChange}
+
             />
     }
 
+    let playerBodyDisplay = currentView === "player" ? "inline" : "none";
+    let commentBodyDisplay = currentView === "comment" ? "flex" : "none";
+
+
     playerBody =
-        <>
+        <div
+            style={{
+                display: playerBodyDisplay,
+            }}
+        >
             {ytBody}
             <div
                 style={{
@@ -182,7 +212,7 @@ export default function PlayerAndCommentWrapper() {
                     <SkipNextIcon />
                 </IconButton>
             </Box>
-        </>
+        </div>
 
     return (
         <Box
@@ -191,6 +221,7 @@ export default function PlayerAndCommentWrapper() {
                 flexDirection: "column",
                 width: "50%",
                 marginLeft: "1%",
+                paddingTop: "8px"
             }}
         >
             <Box
@@ -219,8 +250,12 @@ export default function PlayerAndCommentWrapper() {
                 >
                     {'Comments'}
                 </Button>
-            </ Box>
-            {currentView === "player" ? playerBody : <CommentSection />}
+            </Box>
+            {/* {currentView === "player" ? playerBody : <CommentSection />} */}
+            {playerBody}
+            <CommentSection
+                display={commentBodyDisplay}
+            />
         </Box>
     );
 }

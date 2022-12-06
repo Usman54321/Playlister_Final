@@ -38,6 +38,7 @@ const App = () => {
                             justifyContent: "space-between",
                             height: "100%",
                             width: "100%",
+                            backgroundColor: "#f1f8e9"
                         }}
                     >
                         < AppBanner />

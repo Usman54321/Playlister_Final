@@ -61,7 +61,7 @@ export default function Navbar() {
                     onClick={() => {
                         if (store.currentPage !== "HOME") {
                             store.setPage("HOME");
-                            history.push("/");
+                            // history.push("/");
                         }
                         else {
                             store.closeCurrentList();

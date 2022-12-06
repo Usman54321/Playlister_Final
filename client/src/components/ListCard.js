@@ -15,6 +15,7 @@ import SongCard from './SongCard';
 import List from '@mui/material/List';
 import AddIcon from '@mui/icons-material/Add';
 import Typography from '@mui/material/Typography';
+import SongComponent from './SongComponent';
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -35,17 +36,21 @@ function ListCard(props) {
     const [text, setText] = useState("");
 
     async function updateLikesAndDislikes() {
-        store.getPlaylistById(idNamePair._id).then(
-            (playlist) => {
-                console.log("playlist: ", JSON.stringify(playlist, null, 3));
-                setLikes(playlist.likes)
-                setDislikes(playlist.dislikes)
-            }
-        )
+        if (idNamePair.published !== "None") {
+            store.getPublicPlaylistByID(idNamePair._id).then(
+                (playlist) => {
+                    // console.log("playlist: ", JSON.stringify(playlist, null, 3));
+                    setLikes(playlist.likes)
+                    setDislikes(playlist.dislikes)
+                }
+            )
+            // setLikes(idNamePair.likes)
+            // setDislikes(idNamePair.dislikes)
+        }
     }
 
     useEffect(() => {
-        if (isLoading) {
+        if (isLoading && idNamePair.published !== "None") {
             console.log("loading likes and dislikes");
             updateLikesAndDislikes().then(
                 () => {
@@ -53,7 +58,7 @@ function ListCard(props) {
                 }
             )
         }
-    }, [isLoading]);
+    }, [isLoading, idNamePair.published]);
 
     let isCurrentList = false
     if (store && store.currentList)
@@ -86,7 +91,13 @@ function ListCard(props) {
             console.log("load " + event.target.id);
 
             // CHANGE THE CURRENT LIST
-            store.setCurrentList(id);
+            if (store.currentPage === "HOME") {
+                store.setCurrentList(id);
+            }
+            else {
+                console.log(store.currentPage);
+                store.setCurrentListForCommunity(id);
+            }
         }
     }
 
@@ -160,7 +171,7 @@ function ListCard(props) {
 
     function handlePublish(event) {
         event.stopPropagation();
-        console.log("To be implemented");
+        store.publishPlaylist(idNamePair._id);
     }
 
     function handleDuplicate(event) {
@@ -203,6 +214,7 @@ function ListCard(props) {
                     color: likeColor,
                 }}
                 onClick={handleLike}
+                disabled={!auth.user}
             >
                 <ThumbUpIcon sx={{ p: 1 }} />
             </Button>
@@ -212,6 +224,7 @@ function ListCard(props) {
                     color: dislikeColor,
                 }}
                 onClick={handleDislike}
+                disabled={!auth.user}
             >
                 <ThumbDownIcon sx={{ p: 1 }} />
             </Button>
@@ -238,6 +251,7 @@ function ListCard(props) {
                 sx={{
                     fontSize: '10pt',
                     color: 'grey',
+                    m: "8px"
                 }}
             >
                 {'Published: ' + date}
@@ -248,7 +262,7 @@ function ListCard(props) {
                     color: 'grey',
                 }}
             >
-                {'Views: ' + views}
+                {'Listens: ' + views}
             </Typography>
         </Box>
     }
@@ -282,7 +296,23 @@ function ListCard(props) {
         return editView;
     }
 
-    if (expanded && isCurrentList) {
+    let publishedDeleteButton = <></>
+    if (store.currentPage === "HOME") {
+        publishedDeleteButton = <Button
+            color="primary"
+            variant="outlined"
+            onClick={handleDelete}
+            disabled={auth.user === null}
+            sx={{
+                backgroundColor: "#e3f2fd",
+                mr: "1.5%"
+            }}
+        >
+            {'Delete'}
+        </Button>
+    }
+
+    if (expanded && isCurrentList && idNamePair.published === "None") {
         expandedSongs =
             <Box
                 sx={{
@@ -399,6 +429,7 @@ function ListCard(props) {
                         onClick={handlePublish}
                         sx={{
                             backgroundColor: "#e3f2fd",
+                            mr: "1.5%"
                         }}
                     >
                         {'Publish'}
@@ -417,6 +448,50 @@ function ListCard(props) {
                 </Box>
             </>
     }
+    else if (expanded && isCurrentList && idNamePair.published !== "None") {
+        expandedSongs =
+            <ListItem>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        width: '100%'
+                    }}
+                >
+                    <Box sx={{
+                        p: 1,
+                        flexGrow: 1,
+                    }}>
+                        <SongComponent listId={idNamePair._id} />
+                    </Box>
+                </Box>
+            </ListItem >
+
+        expandedButtons =
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'row-reverse',
+                    width: '100%'
+                }}
+            >
+                <Button
+                    color="primary"
+                    variant="outlined"
+                    onClick={handleDuplicate}
+                    disabled={auth.user === null}
+                    sx={{
+                        backgroundColor: "#e3f2fd",
+                    }}
+                >
+                    {'Duplicate'}
+                </Button>
+
+                {publishedDeleteButton}
+
+            </Box>
+
+    }
 
     let cardColor = "#e3f2fd";
     if (store && store.currentList && store.currentList._id === idNamePair._id) {
@@ -433,6 +508,7 @@ function ListCard(props) {
                 borderRadius: "10px",
                 marginBottom: "1%",
                 backgroundColor: cardColor,
+                marginLeft: "1%",
             }}
             style={{ width: '98%', fontSize: '20pt' }}
             button

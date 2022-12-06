@@ -44,6 +44,15 @@ export const updatePlaylistById = (id, playlist) => {
         playlist: playlist
     })
 }
+export const getPlaylistPairsForCommunity = () => api.get(`/playlistpairscommunity/`)
+export const updatePublicFeatures = (id, playlist) => {
+    return api.put(`/playlist/${id}/updatePublicFeatures`, {
+        // SPECIFY THE PAYLOAD
+        playlist: playlist
+    })
+}
+
+export const getPublicPlaylistByID = (id) => api.get(`/playlist/${id}/getPublicPlaylistByID`)
 
 const apis = {
     createPlaylist,
@@ -51,6 +60,9 @@ const apis = {
     getPlaylistById,
     getPlaylistPairs,
     updatePlaylistById,
+    getPlaylistPairsForCommunity,
+    updatePublicFeatures,
+    getPublicPlaylistByID
 }
 
 export default apis

@@ -12,10 +12,20 @@ export default function SongComponent(props) {
 
     useEffect(() => {
         if (isLoading) {
-            store.getSongsByPlaylistId(list_id).then((data) => {
-                setList(data);
-                setLoading(false);
-            });
+            if (store.currentPage === "HOME") {
+                console.log("Loading home page SongComponent");
+                store.getSongsByPlaylistId(list_id).then((data) => {
+                    setList(data);
+                    setLoading(false);
+                });
+            } else if (store.currentPage === "COMMUNITY") {
+                console.log("Loading community page SongComponent");
+                store.getPublicPlaylistByID(list_id).then((data) => {
+                    let list = data.songs;
+                    setList(list);
+                    setLoading(false);
+                });
+            }
         }
     }, [isLoading]);
 
