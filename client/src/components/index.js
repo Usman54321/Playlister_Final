@@ -1,5 +1,4 @@
 import AppBanner from './AppBanner'
-import EditToolbar from './EditToolbar'
 import HomeScreen from './HomeScreen'
 import HomeWrapper from './HomeWrapper'
 import ListCard from './ListCard'
@@ -11,10 +10,8 @@ import RegisterScreen from './RegisterScreen'
 import SongCard from './SongCard'
 import SplashScreen from './SplashScreen'
 import Statusbar from './Statusbar'
-import WorkspaceScreen from './WorkspaceScreen'
 import CommunityView from './CommunityView'
 import UserView from './UserView'
-import EditPlaylistView from './EditPlaylistView'
 /*
     This serves as a module so that we can import
     all the other components as we wish.
@@ -23,7 +20,6 @@ import EditPlaylistView from './EditPlaylistView'
 */
 export {
     AppBanner,
-    EditToolbar,
     HomeScreen,
     HomeWrapper,
     ListCard,
@@ -35,8 +31,6 @@ export {
     RegisterScreen,
     SplashScreen,
     Statusbar,
-    WorkspaceScreen,
     CommunityView,
     UserView,
-    EditPlaylistView
 }
