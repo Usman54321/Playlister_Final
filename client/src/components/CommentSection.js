@@ -13,9 +13,9 @@ export default function CommentSection(props) {
     const [comment, setComment] = useState("");
     const displayVal = props.display;
 
-    
+
     let list = [];
-    if (store && store.currentList) {
+    if (store && store.currentList && store.currentList.published !== "None") {
         list = store.currentList;
     }
     let comments = [];
@@ -112,7 +112,7 @@ export default function CommentSection(props) {
                     }
                 }}
                 // Prevent you from typing if you are not logged in
-                disabled={!auth.user}
+                disabled={!auth.user || list.length === 0}
             />
         </Box >
     );

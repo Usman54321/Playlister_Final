@@ -54,13 +54,14 @@ export default function Navbar() {
                 <IconButton
                     size="large"
                     style={{ textDecration: 'none', color: 'black' }}
+                    disabled={!auth.user}
                     onClick={() => {
                         if (store.currentPage !== "HOME" && auth.user) {
                             store.setPage("HOME");
                         }
-                        else if (!auth.user) {
-                            store.setPage("COMMUNITY");
-                        }
+                        // else if (!auth.user) {
+                        //     store.setPage("COMMUNITY");
+                        // }
                         else {
                             store.closeCurrentList();
                         }
