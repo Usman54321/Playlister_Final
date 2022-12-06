@@ -1155,13 +1155,13 @@ function GlobalStoreContextProvider(props) {
     }
 
     store.setPlayingList = (id) => {
-        let list = store.idNamePairs.find((list) => {
-            return list._id === id;
-        });
-        console.log("Setting list with ID: " + id + " as playing list");
+        // let list = store.idNamePairs.find((list) => {
+        //     return list._id === id;
+        // });
+        // console.log("Setting list with ID: " + id + " as playing list");
         storeReducer({
             type: GlobalStoreActionType.SET_PLAYING_LIST,
-            payload: list
+            payload: id
         });
     }
 

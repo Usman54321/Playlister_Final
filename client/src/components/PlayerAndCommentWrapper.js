@@ -14,12 +14,26 @@ export default function PlayerAndCommentWrapper() {
     const [currentView, setCurrentView] = useState("player");
     const [currentIndex, setCurrentIndex] = useState(0);
     const [YT, setYTPlayer] = useState(null);
-    const [list, setList] = useState(store.currentPlayingList);
+    const [list, setList] = useState(null);
 
     useEffect(() => {
-        console.log("Setting list in PlayerAndCommentWrapper to: ", store.currentPlayingList);
-        setList(store.currentPlayingList);
-    }, [store.currentPlayingList]);
+        if (store.currentPage === "HOME" && store.currentPlayingList) {
+            store.getPlaylistById(store.currentPlayingList).then(
+                (playlist) => {
+                    console.log("Playlist: ", playlist)
+                    setList(playlist);
+                }
+            )
+        }
+        else if (store.currentPlayingList) {
+            store.getPublicPlaylistByID(store.currentPlayingList).then(
+                (playlist) => {
+                    console.log("Playlist: ", playlist)
+                    setList(playlist);
+                }
+            )
+        }
+    }, [store.currentPlayingList, store.idNamePairs]);
 
     let playerColor = currentView === "player" ? "white" : "#b1bfca";
     let commentColor = currentView === "comment" ? "white" : "#b1bfca";
@@ -56,7 +70,7 @@ export default function PlayerAndCommentWrapper() {
 
 
     let playerBody;
-    let songs = list ? list.songs : [];
+    let songs = list && list.songs && list.songs.length > 0 ? list.songs : null;
     let currentSong = songs ? songs[currentIndex] : null;
     let currentYTID;
     let playlistName = "";
@@ -64,7 +78,7 @@ export default function PlayerAndCommentWrapper() {
     let songArtist = "";
     let index = currentIndex + 1;
 
-    if (songs.length === 0 && currentSong === undefined) {
+    if (!songs && !currentSong) {
         // console.log("No songs in playlist");
         currentYTID = null;
         index = "";
@@ -113,6 +127,23 @@ export default function PlayerAndCommentWrapper() {
     let playerBodyDisplay = currentView === "player" ? "inline" : "none";
     let commentBodyDisplay = currentView === "comment" ? "flex" : "none";
 
+    let rewindDisabled = false;
+    if (currentIndex === 0) {
+        rewindDisabled = true;
+    }
+    else if (!songs) {
+        rewindDisabled = true;
+    }
+
+    let forwardDisabled = false;
+    if (songs) {
+        if (currentIndex === songs.length - 1) {
+            forwardDisabled = true;
+        }
+    }
+    else {
+        forwardDisabled = true;
+    }
 
     playerBody =
         <div
@@ -175,7 +206,7 @@ export default function PlayerAndCommentWrapper() {
                 <IconButton
                     size="large"
                     style={{ textDecration: 'none', color: 'black' }}
-                    disabled={currentIndex === 0 || songs.length === 0}
+                    disabled={rewindDisabled}
                     onClick={() => {
                         if (currentIndex > 0) {
                             setCurrentIndex(currentIndex - 1);
@@ -209,7 +240,7 @@ export default function PlayerAndCommentWrapper() {
                 <IconButton
                     size="large"
                     style={{ textDecration: 'none', color: 'black' }}
-                    disabled={currentIndex === songs.length - 1 || songs.length === 0}
+                    disabled={forwardDisabled}
                     onClick={() => {
                         if (currentIndex < songs.length - 1) {
                             setCurrentIndex(currentIndex + 1);
