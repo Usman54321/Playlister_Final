@@ -34,6 +34,7 @@ export const GlobalStoreActionType = {
     SET_PAGE: "SET_PAGE",
     SET_SORT_TYPE: "SET_SORT_TYPE",
     SET_PLAYING_LIST: "SET_PLAYING_LIST",
+    ADD_VIEW: "ADD_VIEW",
 }
 
 
@@ -95,7 +96,7 @@ function GlobalStoreContextProvider(props) {
         const { type, payload } = action;
         // console.log("Store: " + JSON.stringify(store, null, 3));
 
-        if (type === GlobalStoreActionType.LOAD_ID_NAME_PAIRS || type === GlobalStoreActionType.SET_CURRENT_LIST || type === GlobalStoreActionType.SET_SORT_TYPE) {
+        if (type === GlobalStoreActionType.LOAD_ID_NAME_PAIRS || type === GlobalStoreActionType.SET_CURRENT_LIST || type === GlobalStoreActionType.SET_SORT_TYPE || type === GlobalStoreActionType.ADD_VIEW) {
             console.log("storeReducer: " + type + " " + JSON.stringify(payload, null, 3));
         }
         else
@@ -277,8 +278,8 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.SET_PAGE: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentPage: payload,
-                    currentSort: store.currentSort,
+                    currentPage: payload.page,
+                    currentSort: payload.sort,
                     idNamePairs: store.idNamePairs,
                     currentList: store.currentList,
                     currentSongIndex: -1,
@@ -322,6 +323,23 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
                     currentPlayingList: payload,
+                });
+            }
+
+            case GlobalStoreActionType.ADD_VIEW: {
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    currentPage: store.currentPage,
+                    currentSort: store.currentSort,
+                    idNamePairs: payload.idNamePairs,
+                    currentList: store.currentList,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    currentPlayingList: payload.id,
                 });
             }
 
@@ -730,21 +748,27 @@ function GlobalStoreContextProvider(props) {
     }
 
     store.setPage = (page) => {
-        storeReducer({
-            type: GlobalStoreActionType.SET_PAGE,
-            payload: page
-        });
-
         let url = ""
+        let sort = SortType.CREATION_DATE;
         if (page === CurrentPage.HOME) {
             url = "/";
         }
         else if (page === CurrentPage.COMMUNITY) {
             url = "/community-lists";
+            sort = SortType.NAME;
+
         }
         else if (page === CurrentPage.USER) {
             url = "/user-lists";
+            sort = SortType.NAME;
         }
+        storeReducer({
+            type: GlobalStoreActionType.SET_PAGE,
+            payload: {
+                page: page,
+                sort: sort
+            }
+        });
         history.push(url);
     }
 
@@ -948,10 +972,10 @@ function GlobalStoreContextProvider(props) {
                             let pairsArray = response.data.idNamePairs;
                             let sorted = store.sortHelper(pairsArray, store.currentSort);
                             storeReducer({
-                                type: GlobalStoreActionType.CHANGE_LIST_NAME,
+                                type: GlobalStoreActionType.ADD_VIEW,
                                 payload: {
                                     idNamePairs: sorted,
-                                    playlist: playlist,
+                                    id: id,
                                 }
                             });
                         }
@@ -968,10 +992,10 @@ function GlobalStoreContextProvider(props) {
                             let pairsArray = response.data.idNamePairs;
                             let sorted = store.sortHelper(pairsArray, store.currentSort);
                             storeReducer({
-                                type: GlobalStoreActionType.CHANGE_LIST_NAME,
+                                type: GlobalStoreActionType.ADD_VIEW,
                                 payload: {
                                     idNamePairs: sorted,
-                                    playlist: playlist,
+                                    id: id,
                                 }
                             });
                         }
@@ -992,10 +1016,10 @@ function GlobalStoreContextProvider(props) {
                     }
                     let sorted = store.sortHelper(modifiedIdNamePairs, store.currentSort);
                     storeReducer({
-                        type: GlobalStoreActionType.CHANGE_LIST_NAME,
+                        type: GlobalStoreActionType.GlobalStoreActionType.ADD_VIEW,
                         payload: {
                             idNamePairs: sorted,
-                            playlist: playlist,
+                            id: id,
                         }
                     });
                 }

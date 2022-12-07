@@ -39,6 +39,14 @@ export default function CommentSection(props) {
         comments = list.comments;
     }
     let cardColor = "#e3f2fd";
+    let placeholder = "Add a comment";
+    if (!auth.user) {
+        placeholder = "Log in to add a comment";
+    }
+    else if (list && list.published === "None") {
+        placeholder = "Only published playlists can have comments";
+    }
+
     let commentList = comments.map((comment, index) => {
         return (
             <ListItem
@@ -110,7 +118,7 @@ export default function CommentSection(props) {
                 {commentList}
             </List>
             <InputBase
-                placeholder="Add a comment"
+                placeholder={placeholder}
                 inputProps={{ "aria-label": "add a comment" }}
                 sx={{
                     width: "80%",
@@ -128,7 +136,7 @@ export default function CommentSection(props) {
                     }
                 }}
                 // Prevent you from typing if you are not logged in
-                disabled={!auth.user || !list || list.length === 0}
+                disabled={!auth.user || !list || list.length === 0 || list.published === "None"}
             />
         </Box >
     );

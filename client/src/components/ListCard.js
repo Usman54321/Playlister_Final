@@ -94,21 +94,21 @@ function ListCard(props) {
 
         let notExpanded = !expanded;
         // We are expanding a published playlist and it is not already expanded
-        if (notExpanded && idNamePair.published !== "None") {
-            store.viewPlaylist(idNamePair._id).then(
-                () => {
-                    setExpanded(notExpanded);
-                }
-            )
-            console.log("We are expanding a published playlist");
-            console.log("Expanded is now set to: " + notExpanded);
-        }
-        else
-            setExpanded(notExpanded);
+        // if (notExpanded && idNamePair.published !== "None") {
+        //     store.viewPlaylist(idNamePair._id).then(
+        //         () => {
+        //             setExpanded(notExpanded);
+        //         }
+        //     )
+        //     console.log("We are expanding a published playlist");
+        //     console.log("Expanded is now set to: " + notExpanded);
+        // }
+        // else
+        setExpanded(notExpanded);
     }
 
     function handleLoadList(event, id) {
-        if (event.detail === 2) {
+        if (event.detail === 2 && auth.user && idNamePair.ownerUserName === auth.user.userName && idNamePair.published === "None") {
             handleToggleEdit(event);
             return;
         }
@@ -121,8 +121,14 @@ function ListCard(props) {
 
             console.log("load " + event.target.id);
 
-            // Set this list to play
-            store.setPlayingList(id);
+            if (idNamePair.published === "None")
+                store.setPlayingList(id);
+            else if (id === store.currentPlayingList)
+                return;
+            else {
+                // store.setPlayingList(id);
+                store.viewPlaylist(id);
+            }
         }
     }
 

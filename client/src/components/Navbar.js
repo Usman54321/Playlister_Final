@@ -22,10 +22,11 @@ export default function Navbar() {
         <option value="name">Name (A-Z)</option>
     </>
 
-    let expandedSortOptions = <></>
+    // let expandedSortOptions = <></>
     if (store.currentPage === "COMMUNITY" || store.currentPage === "USER") {
-        expandedSortOptions =
+        sortOptions =
             <>
+                <option value="name">Name (A-Z)</option>
                 <option value="likes">Likes (High - Low)</option>
                 <option value="dislikes">Dislikes (High - Low) </option>
                 <option value="listens">Listens (High - Low)</option>
@@ -130,7 +131,7 @@ export default function Navbar() {
                         onChange={handleSortChange}
                     >
                         {sortOptions}
-                        {expandedSortOptions}
+                        {/* {expandedSortOptions} */}
                     </Select>
                 </FormControl>
             </Box>
