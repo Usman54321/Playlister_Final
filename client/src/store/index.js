@@ -278,8 +278,8 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.SET_PAGE: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    currentPage: payload,
-                    currentSort: store.currentSort,
+                    currentPage: payload.page,
+                    currentSort: payload.sort,
                     idNamePairs: store.idNamePairs,
                     currentList: store.currentList,
                     currentSongIndex: -1,
@@ -748,21 +748,27 @@ function GlobalStoreContextProvider(props) {
     }
 
     store.setPage = (page) => {
-        storeReducer({
-            type: GlobalStoreActionType.SET_PAGE,
-            payload: page
-        });
-
         let url = ""
+        let sort = SortType.CREATION_DATE;
         if (page === CurrentPage.HOME) {
             url = "/";
         }
         else if (page === CurrentPage.COMMUNITY) {
             url = "/community-lists";
+            sort = SortType.NAME;
+
         }
         else if (page === CurrentPage.USER) {
             url = "/user-lists";
+            sort = SortType.NAME;
         }
+        storeReducer({
+            type: GlobalStoreActionType.SET_PAGE,
+            payload: {
+                page: page,
+                sort: sort
+            }
+        });
         history.push(url);
     }
 
