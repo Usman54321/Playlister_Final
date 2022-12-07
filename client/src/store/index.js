@@ -36,6 +36,7 @@ export const GlobalStoreActionType = {
     SET_PLAYING_LIST: "SET_PLAYING_LIST",
     ADD_VIEW: "ADD_VIEW",
     DUPLICATE_LIST: "DUPLICATE_LIST",
+    DUPLICATE_LIST: "DUPLICATE_LIST",
     MARK_AUTHOR_FOR_SEARCH: "MARK_AUTHOR_FOR_SEARCH",
 }
 
@@ -394,6 +395,23 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentPlayingList: store.currentPlayingList,
                     authorMarkedForSearch: payload,
+                });
+            }
+
+            case GlobalStoreActionType.DUPLICATE_LIST: {
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    currentPage: CurrentPage.HOME,
+                    currentSort: store.currentSort,
+                    idNamePairs: payload,
+                    currentList: null,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    currentPlayingList: store.currentPlayingList,
                 });
             }
 
@@ -1157,8 +1175,17 @@ function GlobalStoreContextProvider(props) {
                         let sorted = store.sortHelper(pairsArray, store.currentSort);
                         storeReducer({
                             type: GlobalStoreActionType.DUPLICATE_LIST,
+                            type: GlobalStoreActionType.DUPLICATE_LIST,
                             payload: sorted
                         });
+                        history.push("/");
+                        // if (store.currentPage !== CurrentPage.HOME) {
+                        //     store.setPage(CurrentPage.HOME);
+                        // }
+                    }
+                }
+            }
+        }
                         history.push("/");
                         // if (store.currentPage !== CurrentPage.HOME) {
                         //     store.setPage(CurrentPage.HOME);
