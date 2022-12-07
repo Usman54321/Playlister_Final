@@ -838,7 +838,7 @@ function GlobalStoreContextProvider(props) {
                 else if (store.currentPage === CurrentPage.USER) {
                     let modifiedIdNamePairs = [...store.idNamePairs];
                     for (let i = 0; i < modifiedIdNamePairs.length; i++) {
-                        if (modifiedIdNamePairs[i]._id == id) {
+                        if (modifiedIdNamePairs[i]._id === id) {
                             modifiedIdNamePairs[i] = playlist;
                             break;
                         }
@@ -914,7 +914,7 @@ function GlobalStoreContextProvider(props) {
                 else if (store.currentPage === CurrentPage.USER) {
                     let modifiedIdNamePairs = [...store.idNamePairs];
                     for (let i = 0; i < modifiedIdNamePairs.length; i++) {
-                        if (modifiedIdNamePairs[i]._id == id) {
+                        if (modifiedIdNamePairs[i]._id === id) {
                             modifiedIdNamePairs[i] = playlist;
                             break;
                         }
