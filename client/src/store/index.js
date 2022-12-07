@@ -35,6 +35,7 @@ export const GlobalStoreActionType = {
     SET_SORT_TYPE: "SET_SORT_TYPE",
     SET_PLAYING_LIST: "SET_PLAYING_LIST",
     ADD_VIEW: "ADD_VIEW",
+    DUPLICATE_LIST: "DUPLICATE_LIST",
 }
 
 
@@ -340,6 +341,23 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
                     currentPlayingList: payload.id,
+                });
+            }
+
+            case GlobalStoreActionType.DUPLICATE_LIST: {
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    currentPage: CurrentPage.HOME,
+                    currentSort: store.currentSort,
+                    idNamePairs: payload,
+                    currentList: null,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    currentPlayingList: store.currentPlayingList,
                 });
             }
 
@@ -1121,12 +1139,13 @@ function GlobalStoreContextProvider(props) {
                         let pairsArray = response.data.idNamePairs;
                         let sorted = store.sortHelper(pairsArray, store.currentSort);
                         storeReducer({
-                            type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                            type: GlobalStoreActionType.DUPLICATE_LIST,
                             payload: sorted
                         });
-                        if (store.currentPage !== CurrentPage.HOME) {
-                            store.setPage(CurrentPage.HOME);
-                        }
+                        history.push("/");
+                        // if (store.currentPage !== CurrentPage.HOME) {
+                        //     store.setPage(CurrentPage.HOME);
+                        // }
                     }
                 }
             }
