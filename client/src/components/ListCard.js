@@ -17,6 +17,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Typography from '@mui/material/Typography';
 import SongComponent from './SongComponent';
 import MUIRenameModal from './MUIRenameModal';
+import { Link } from 'react-router-dom';
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -131,11 +132,6 @@ function ListCard(props) {
             }
         }
     }
-
-    // function handleEdit(event) {
-    //     event.stopPropagation();
-    //     store.editPlaylist(idNamePair._id);
-    // }
 
     function handleLike(event) {
         event.stopPropagation();
@@ -601,6 +597,15 @@ function ListCard(props) {
                         p: 1,
                         flexGrow: 1,
                         fontSize: '12pt',
+                        cursor: 'pointer',
+                        color: 'blue',
+                        '&:hover': {
+                            textDecoration: 'underline'
+                        },
+                    }}
+                    onClick={(event) => {
+                        event.stopPropagation();
+                        store.markAuthorForSeach(author)
                     }}
                 >
                     {'By:\t' + author}

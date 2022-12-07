@@ -17,6 +17,10 @@ const UserView = () => {
     const { auth } = useContext(AuthContext);
 
     useEffect(() => {
+        if (store.authorMarkedForSearch) {
+            store.search(store.authorMarkedForSearch)
+            return;
+        }
         store.clearIDNamePairs();
     }, []);
 

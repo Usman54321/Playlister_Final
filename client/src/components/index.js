@@ -12,6 +12,7 @@ import SplashScreen from './SplashScreen'
 import Statusbar from './Statusbar'
 import CommunityView from './CommunityView'
 import UserView from './UserView'
+
 /*
     This serves as a module so that we can import
     all the other components as we wish.
