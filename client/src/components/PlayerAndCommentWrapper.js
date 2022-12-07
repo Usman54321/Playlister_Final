@@ -18,20 +18,30 @@ export default function PlayerAndCommentWrapper() {
 
     useEffect(() => {
         if (store.currentPage === "HOME" && store.currentPlayingList) {
+            let hasListChanged = false;
+            if (list && store.currentPlayingList !== list._id) {
+                hasListChanged = true;
+            }
             store.getPlaylistById(store.currentPlayingList).then(
                 (playlist) => {
                     console.log("Playlist: ", playlist)
                     setList(playlist);
-                    setCurrentIndex(0);
+                    if (hasListChanged)
+                        setCurrentIndex(0);
                 }
             )
         }
         else if (store.currentPlayingList) {
+            let hasListChanged = false;
+            if (list && store.currentPlayingList !== list._id) {
+                hasListChanged = true;
+            }
             store.getPublicPlaylistByID(store.currentPlayingList).then(
                 (playlist) => {
                     console.log("Playlist: ", playlist)
                     setList(playlist);
-                    setCurrentIndex(0);
+                    if (hasListChanged)
+                        setCurrentIndex(0);
                 }
             )
         }
