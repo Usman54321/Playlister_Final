@@ -482,6 +482,9 @@ function GlobalStoreContextProvider(props) {
         processDelete(id);
     }
     store.deleteMarkedList = function () {
+        // if (store.listIdMarkedForDeletion === store.currentPlayingList) {
+        //     store.setPlayingList(null);
+        // }
         store.deleteList(store.listIdMarkedForDeletion);
     }
     // THIS FUNCTION SHOWS THE MODAL FOR PROMPTING THE USER
@@ -1258,7 +1261,7 @@ function GlobalStoreContextProvider(props) {
         // let list = store.idNamePairs.find((list) => {
         //     return list._id === id;
         // });
-        // console.log("Setting list with ID: " + id + " as playing list");
+        console.log("Setting list with ID: " + id + " as playing list");
         storeReducer({
             type: GlobalStoreActionType.SET_PLAYING_LIST,
             payload: id

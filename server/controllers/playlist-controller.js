@@ -94,7 +94,10 @@ getPlaylistById = async (req, res) => {
         if (err) {
             return res.status(400).json({ success: false, error: err });
         }
-        // console.log("Found list: " + JSON.stringify(list));
+
+        if (list === null) {
+            return res.status(404).json({ success: false, error: "Playlist not found!" });
+        }
 
         // DOES THIS LIST BELONG TO THIS USER?
         async function asyncFindUser(list) {

@@ -18,10 +18,28 @@ export default function PlayerAndCommentWrapper() {
 
     useEffect(() => {
         if (store.currentPage === "HOME" && store.currentPlayingList) {
+            let doesThisListExist = false;
+
+            for (const element of store.idNamePairs) {
+                if (element._id === store.currentPlayingList) {
+                    doesThisListExist = true;
+                    break;
+                }
+            }
+
+            console.log("List with id: ", store.currentPlayingList, " exists: ", doesThisListExist)
+
+            if (!doesThisListExist) {
+                store.setPlayingList(null);
+                setList(null);
+                return;
+            }
+
             let hasListChanged = false;
             if (list && store.currentPlayingList !== list._id) {
                 hasListChanged = true;
             }
+
             store.getPlaylistById(store.currentPlayingList).then(
                 (playlist) => {
                     console.log("Playlist: ", playlist)
@@ -32,6 +50,23 @@ export default function PlayerAndCommentWrapper() {
             )
         }
         else if (store.currentPlayingList) {
+            let doesThisListExist = false;
+
+            for (const element of store.idNamePairs) {
+                if (element._id === store.currentPlayingList) {
+                    doesThisListExist = true;
+                    break;
+                }
+            }
+
+            console.log("List with id: ", store.currentPlayingList, " exists: ", doesThisListExist)
+
+            if (!doesThisListExist) {
+                store.setPlayingList(null);
+                setList(null);
+                return;
+            }
+
             let hasListChanged = false;
             if (list && store.currentPlayingList !== list._id) {
                 hasListChanged = true;
