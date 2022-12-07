@@ -666,6 +666,10 @@ function GlobalStoreContextProvider(props) {
     }
 
     store.search = (query) => {
+        if (query === "") {
+            store.clearIDNamePairs();
+            return;
+        }
         if (store.currentPage === CurrentPage.HOME) {
             async function asyncLoadIdNamePairs() {
                 const response = await api.getPlaylistPairs();
