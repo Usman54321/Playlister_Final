@@ -71,7 +71,7 @@ function ListCard(props) {
     if (store && store.currentList)
         isCurrentList = store.currentList._id === idNamePair._id;
     else if (store && store.currentList && expanded) {
-        console.log("Our list is not the current list but we are expanded");
+        // console.log("Our list is not the current list but we are expanded");
         setExpanded(false);
     }
 
@@ -541,7 +541,7 @@ function ListCard(props) {
     }
 
     let cardColor = "#e3f2fd";
-    if (store && store.currentList && store.currentList._id === idNamePair._id) {
+    if (store && store.currentPlayingList && store.currentPlayingList === idNamePair._id) {
         cardColor = '#e0f2f1';
     }
 
@@ -592,8 +592,6 @@ function ListCard(props) {
                     flexDirection: 'row',
                     fontSize: '12pt',
                     p: 1,
-                    // justifyContent: 'flex-start',
-                    // width: '100%'
                 }}
             >
                 <p
