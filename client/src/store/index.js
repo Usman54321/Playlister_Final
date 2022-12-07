@@ -1149,7 +1149,8 @@ function GlobalStoreContextProvider(props) {
                     response = await api.getPlaylistPairs();
                     if (response.data.success) {
                         let pairsArray = response.data.idNamePairs;
-                        let sorted = store.sortHelper(pairsArray, store.currentSort);
+                        let sortType = SortType.CREATION_DATE;
+                        let sorted = store.sortHelper(pairsArray, sortType);
                         storeReducer({
                             type: GlobalStoreActionType.DUPLICATE_LIST,
                             payload: sorted

@@ -17,7 +17,6 @@ import AddIcon from '@mui/icons-material/Add';
 import Typography from '@mui/material/Typography';
 import SongComponent from './SongComponent';
 import MUIRenameModal from './MUIRenameModal';
-import { Link } from 'react-router-dom';
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -206,6 +205,7 @@ function ListCard(props) {
 
     function handlePublish(event) {
         event.stopPropagation();
+        setExpanded(false);
         store.publishPlaylist(idNamePair._id);
     }
 
