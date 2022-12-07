@@ -1079,6 +1079,9 @@ function GlobalStoreContextProvider(props) {
                             type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
                             payload: sorted
                         });
+                        if (store.currentPage !== CurrentPage.HOME) {
+                            store.setPage(CurrentPage.HOME);
+                        }
                     }
                 }
             }
