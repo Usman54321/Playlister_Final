@@ -32,42 +32,47 @@ function ListCard(props) {
     const [expanded, setExpanded] = useState(false);
     const [likes, setLikes] = useState([]);
     const [dislikes, setDislikes] = useState([]);
-    const [isLoading, setLoading] = useState(true);
+    // const [isLoading, setLoading] = useState(true);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
     const [modalView, setModalView] = useState(false);
 
+    // async function updateLikesAndDislikes() {
+    //     if (idNamePair.published !== "None") {
+    //         store.getPublicPlaylistByID(idNamePair._id).then(
+    //             (playlist) => {
+    //                 // console.log("playlist: ", JSON.stringify(playlist, null, 3));
+    //                 setLikes(playlist.likes)
+    //                 setDislikes(playlist.dislikes)
+    //             }
+    //         )
+    //         // setLikes(idNamePair.likes)
+    //         // setDislikes(idNamePair.dislikes)
+    //     }
+    // }
 
-    async function updateLikesAndDislikes() {
-        if (idNamePair.published !== "None") {
-            store.getPublicPlaylistByID(idNamePair._id).then(
-                (playlist) => {
-                    // console.log("playlist: ", JSON.stringify(playlist, null, 3));
-                    setLikes(playlist.likes)
-                    setDislikes(playlist.dislikes)
-                }
-            )
-            // setLikes(idNamePair.likes)
-            // setDislikes(idNamePair.dislikes)
-        }
+    let updateLikesAndDislikes = () => {
+        console.log("idNamePair with id " + idNamePair._id + " has likes: " + idNamePair.likes + " and dislikes: " + idNamePair.dislikes);
+        setLikes(idNamePair.likes)
+        setDislikes(idNamePair.dislikes)
     }
 
     useEffect(() => {
-        if (isLoading && idNamePair.published !== "None") {
+        if (idNamePair.published !== "None") {
             // console.log("loading likes and dislikes");
-            updateLikesAndDislikes().then(
-                () => {
-                    setLoading(false);
-                }
-            )
+            updateLikesAndDislikes();
+            // setLoading(false);
         }
-    }, [isLoading, idNamePair.published]);
+        // }, [idNamePair.likes, idNamePair.dislikes, idNamePair.published]);
+    }, [store.idNamePairs]);
 
     let isCurrentList = false
     if (store && store.currentList)
         isCurrentList = store.currentList._id === idNamePair._id;
-    else if (store && store.currentList && expanded)
+    else if (store && store.currentList && expanded) {
+        console.log("Our list is not the current list but we are expanded");
         setExpanded(false);
+    }
 
     function handleExpansion(event) {
         event.stopPropagation();
@@ -87,17 +92,19 @@ function ListCard(props) {
         // event.stopPropagation();
         console.log("Expanded Listcard " + idNamePair._id + " to " + !expanded);
 
-        // We are expanding a published playlist
-        if (!expanded && idNamePair.published !== "None") {
+        let notExpanded = !expanded;
+        // We are expanding a published playlist and it is not already expanded
+        if (notExpanded && idNamePair.published !== "None") {
             store.viewPlaylist(idNamePair._id).then(
                 () => {
-                    setExpanded(!expanded);
+                    setExpanded(notExpanded);
                 }
             )
             console.log("We are expanding a published playlist");
-            return;
+            console.log("Expanded is now set to: " + notExpanded);
         }
-        setExpanded(!expanded);
+        else
+            setExpanded(notExpanded);
     }
 
     function handleLoadList(event, id) {
@@ -126,20 +133,12 @@ function ListCard(props) {
 
     function handleLike(event) {
         event.stopPropagation();
-        store.likePlaylist(idNamePair._id, auth.user.userName).then(
-            () => {
-                setLoading(true)
-            }
-        );
+        store.likePlaylist(idNamePair._id, auth.user.userName);
     }
 
     function handleDislike(event) {
         event.stopPropagation();
-        store.dislikePlaylist(idNamePair._id, auth.user.userName).then(
-            () => {
-                setLoading(true)
-            }
-        );
+        store.dislikePlaylist(idNamePair._id, auth.user.userName);
     }
 
     function handleToggleEdit(event) {
@@ -221,8 +220,10 @@ function ListCard(props) {
     let likesNum;
     let dislikesNum;
 
-    likesNum = isLoading ? "Loading..." : likes.length;
-    dislikesNum = isLoading ? "Loading..." : dislikes.length;
+    if (likes)
+        likesNum = likes.length;
+    if (dislikes)
+        dislikesNum = dislikes.length;
 
     if (expanded && isCurrentList) {
         icon = <KeyboardDoubleArrowUpIcon

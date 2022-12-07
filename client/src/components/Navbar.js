@@ -23,11 +23,12 @@ export default function Navbar() {
     </>
 
     let expandedSortOptions = <></>
-    if (store.currentPage === "COMMUNITY") {
+    if (store.currentPage === "COMMUNITY" || store.currentPage === "USER") {
         expandedSortOptions =
             <>
                 <option value="likes">Likes (High - Low)</option>
                 <option value="dislikes">Dislikes (High - Low) </option>
+                <option value="listens">Listens (High - Low)</option>
                 <option value="publishedDate">Published Date (New-Old)</option>
             </>
     }
