@@ -7,6 +7,7 @@ import { List, Box } from '@mui/material';
 
 import Navbar from './Navbar';
 import PlayerAndCommentWrapper from './PlayerAndCommentWrapper.js'
+import AuthContext from '../auth';
 
 /*
     This React component lists all the top5 lists in the UI.
@@ -15,6 +16,7 @@ import PlayerAndCommentWrapper from './PlayerAndCommentWrapper.js'
 */
 const CommunityView = () => {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
 
     useEffect(() => {
         store.loadIdNamePairsForCommunity();
@@ -64,7 +66,7 @@ const CommunityView = () => {
                     justifyContent: "space-between",
                     width: "100%",
                     marginTop: "1%",
-                    height: "80%",
+                    height: auth && auth.user ? "80%" : "90%",
                 }}
             >
                 <div id="playlist-selector"

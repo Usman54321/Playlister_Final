@@ -5,6 +5,7 @@ import { List, Box } from '@mui/material';
 
 import Navbar from './Navbar';
 import PlayerAndCommentWrapper from './PlayerAndCommentWrapper.js'
+import AuthContext from '../auth';
 
 /*
     This React component lists all the top5 lists in the UI.
@@ -13,6 +14,7 @@ import PlayerAndCommentWrapper from './PlayerAndCommentWrapper.js'
 */
 const UserView = () => {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
 
     useEffect(() => {
         store.clearIDNamePairs();
@@ -51,7 +53,7 @@ const UserView = () => {
                     justifyContent: "space-between",
                     width: "100%",
                     marginTop: "1%",
-                    height: "80%",
+                    height: auth && auth.user ? "80%" : "90%",
                 }}
             >
                 <div id="playlist-selector"
