@@ -16,6 +16,8 @@ export default function SearchBar() {
         store.search(searchTerm);
     }
 
+
+
     return (
         <Paper
             component="form"
@@ -28,7 +30,13 @@ export default function SearchBar() {
                 inputProps={{ 'aria-label': 'search' }}
                 onChange={(event) => {
                     setSearchTerm(event.target.value)
-                    store.search(event.target.value)
+                }}
+                onKeyPress={(event) => {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        handleSearch(event);
+                    }
                 }}
             />
             <IconButton

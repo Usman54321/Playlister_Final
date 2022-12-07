@@ -1,5 +1,5 @@
 import GlobalStoreContext from "../store";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { List } from "@mui/material";
 import ListItem from '@mui/material/ListItem';
 import Typography from "@mui/material/Typography";
@@ -12,14 +12,30 @@ export default function CommentSection(props) {
     const { auth } = useContext(AuthContext);
     const [comment, setComment] = useState("");
     const displayVal = props.display;
+    const [list, setList] = useState(null);
+
+    useEffect(() => {
+        if (store.currentPage === "HOME" && store.currentPlayingList) {
+            store.getPlaylistById(store.currentPlayingList).then(
+                (playlist) => {
+                    console.log("Playlist: ", playlist)
+                    setList(playlist);
+                }
+            )
+        }
+        else if (store.currentPlayingList) {
+            store.getPublicPlaylistByID(store.currentPlayingList).then(
+                (playlist) => {
+                    console.log("Playlist: ", playlist)
+                    setList(playlist);
+                }
+            )
+        }
+    }, [store.currentPlayingList, store.idNamePairs, store.currentPage]);
 
 
-    let list = [];
-    if (store && store.currentList && store.currentList.published !== "None") {
-        list = store.currentList;
-    }
     let comments = [];
-    if (list.comments) {
+    if (list && list.comments) {
         comments = list.comments;
     }
     let cardColor = "#e3f2fd";
@@ -112,7 +128,7 @@ export default function CommentSection(props) {
                     }
                 }}
                 // Prevent you from typing if you are not logged in
-                disabled={!auth.user || list.length === 0}
+                disabled={!auth.user || !list || list.length === 0}
             />
         </Box >
     );
