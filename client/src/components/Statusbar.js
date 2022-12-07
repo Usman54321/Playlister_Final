@@ -18,7 +18,7 @@ function Statusbar() {
         store.createNewList();
     }
 
-    if (auth && auth.loggedIn) {
+    if (auth && auth.user) {
         return (
             <div id="playlister-statusbar">
                 <Fab
