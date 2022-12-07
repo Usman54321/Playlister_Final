@@ -1066,14 +1066,14 @@ function GlobalStoreContextProvider(props) {
                 response = await api.createPlaylist(playlistName, playlistSongs, username);
                 if (response.status === 201) {
                     tps.clearAllTransactions();
-                    if (store.page === CurrentPage.HOME) {
-                        response = await api.getPlaylistPairs();
-                    }
-                    else if (store.page === CurrentPage.COMMUNITY) {
-                        response = await api.getPublicPlaylistPairs();
-                    }
+                    // if (store.page === CurrentPage.HOME) {
+                    response = await api.getPlaylistPairs();
+                    // }
+                    // else if (store.page === CurrentPage.COMMUNITY) {
+                    //     response = await api.getPublicPlaylistPairs();
+                    // }
                     if (response.data.success) {
-                        let pairsArray = response.data.pairs;
+                        let pairsArray = response.data.idNamePairs;
                         let sorted = store.sortHelper(pairsArray, store.currentSort);
                         storeReducer({
                             type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,

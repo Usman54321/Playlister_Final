@@ -10,6 +10,7 @@ import PlayerAndCommentWrapper from './PlayerAndCommentWrapper.js'
 import MUIEditSongModal from "./MUIEditSongModal"
 import MUIRemoveSongModal from "./MUIRemoveSongModal"
 import AuthContext from '../auth';
+import { useState } from 'react';
 
 /*
     This React component lists all the top5 lists in the UI.
@@ -19,10 +20,17 @@ import AuthContext from '../auth';
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
+    const [idNamePairs, setIdNamePairs] = useState([])
+    const [firstLoad, setFirstLoad] = useState(true)
 
     useEffect(() => {
-        store.loadIdNamePairs();
-    }, []);
+        if (firstLoad) {
+            store.loadIdNamePairs();
+            setFirstLoad(false)
+            return;
+        }
+        setIdNamePairs(store.idNamePairs)
+    }, [store.idNamePairs]);
 
     let listCard = "";
     if (store && store.idNamePairs.length > 0) {
