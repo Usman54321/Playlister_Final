@@ -1032,7 +1032,7 @@ function GlobalStoreContextProvider(props) {
 
     store.addComment = (username, comment) => {
         async function asyncAddComment(username, comment) {
-            let response = await api.getPublicPlaylistByID(store.currentList._id);
+            let response = await api.getPublicPlaylistByID(store.currentPlayingList);
             if (response.data.success) {
                 let playlist = response.data.playlist;
                 playlist.comments.push({ userName: username, comment: comment });
