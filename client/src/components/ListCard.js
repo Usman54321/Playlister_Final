@@ -556,6 +556,7 @@ function ListCard(props) {
                 marginBottom: "1%",
                 backgroundColor: cardColor,
                 marginLeft: "1%",
+                alignItems: 'normal',
             }}
             style={{ width: '98%', fontSize: '20pt' }}
             button
@@ -589,19 +590,18 @@ function ListCard(props) {
                 sx={{
                     display: 'flex',
                     flexDirection: 'row',
-                    width: '100%'
+                    fontSize: '12pt',
+                    p: 1,
+                    // justifyContent: 'flex-start',
+                    // width: '100%'
                 }}
             >
-                <Box
-                    sx={{
-                        p: 1,
-                        flexGrow: 1,
-                        fontSize: '12pt',
+                <p
+                    style={{
                         cursor: 'pointer',
                         color: 'blue',
-                        '&:hover': {
-                            textDecoration: 'underline'
-                        },
+                        textDecoration: 'underline',
+                        margin: 0,
                     }}
                     onClick={(event) => {
                         event.stopPropagation();
@@ -609,7 +609,7 @@ function ListCard(props) {
                     }}
                 >
                     {'By:\t' + author}
-                </Box>
+                </p>
             </Box>
 
             <Box
