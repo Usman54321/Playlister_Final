@@ -56,7 +56,7 @@ export default function LoginScreen() {
                     md={5}
                     component={Paper}
                     elevation={6}
-                    // square
+                // square
                 >
                     <Box
                         sx={{
