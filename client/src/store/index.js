@@ -1038,10 +1038,55 @@ function GlobalStoreContextProvider(props) {
                 playlist.comments.push({ userName: username, comment: comment });
                 response = await api.updatePublicFeatures(playlist._id, playlist);
                 if (response.data.success) {
-                    storeReducer({
-                        type: GlobalStoreActionType.SET_CURRENT_LIST,
-                        payload: playlist
-                    });
+                    // Now we need to map playlist pairs again
+                    if (store.currentPage === CurrentPage.HOME) {
+                        async function asyncLoadIdNamePairs() {
+                            const response = await api.getPlaylistPairs();
+                            if (response.data.success) {
+                                let pairsArray = response.data.idNamePairs;
+                                let sortedPairsArray = store.sortHelper(pairsArray, store.currentSort);
+                                storeReducer({
+                                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                                    payload: sortedPairsArray
+                                });
+                            }
+                            else {
+                                console.log("API FAILED TO GET THE LIST PAIRS");
+                            }
+                        }
+                        asyncLoadIdNamePairs();
+                    }
+                    else if (store.currentPage === CurrentPage.COMMUNITY) {
+                        async function asyncLoadCommunityIdNamePairs() {
+                            const response = await api.getPlaylistPairsForCommunity();
+                            if (response.data.success) {
+                                let pairsArray = response.data.idNamePairs;
+                                let sortedPairsArray = store.sortHelper(pairsArray, store.currentSort);
+                                storeReducer({
+                                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                                    payload: sortedPairsArray
+                                });
+                            }
+                            else {
+                                console.log("API FAILED TO GET THE LIST PAIRS");
+                            }
+                        }
+                        asyncLoadCommunityIdNamePairs();
+                    }
+                    else if (store.currentPage === CurrentPage.USER) {
+                        let modifiedIdNamePairs = [...store.idNamePairs];
+                        for (let i = 0; i < modifiedIdNamePairs.length; i++) {
+                            if (modifiedIdNamePairs[i]._id === playlist._id) {
+                                modifiedIdNamePairs[i] = playlist;
+                                break;
+                            }
+                        }
+                        let sorted = store.sortHelper(modifiedIdNamePairs, store.currentSort);
+                        storeReducer({
+                            type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                            payload: sorted
+                        });
+                    }
                 }
             }
         }
