@@ -57,7 +57,6 @@ export default function PlayerAndCommentWrapper() {
         }
     }
 
-
     let handleStop = () => {
         console.log("YT: ", YT);
         if (YT)

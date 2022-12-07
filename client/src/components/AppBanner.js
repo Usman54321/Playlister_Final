@@ -131,6 +131,9 @@ export default function AppBanner() {
                                 // We are in Guest mode
                                 store.setPage("COMMUNITY");
                             }
+                            else if (auth && store && !auth.user && !auth.loggedIn) {
+                                store.setPage("HOME");
+                            }
                         }}
                         style={{ cursor: 'pointer' }}
                     />
