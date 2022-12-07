@@ -6,7 +6,7 @@ import { List, Box } from '@mui/material';
 import Navbar from './Navbar';
 import PlayerAndCommentWrapper from './PlayerAndCommentWrapper.js'
 import AuthContext from '../auth';
-
+import { useHistory } from 'react-router-dom';
 /*
     This React component lists all the top5 lists in the UI.
     
@@ -15,8 +15,13 @@ import AuthContext from '../auth';
 const UserView = () => {
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
+    const history = useHistory();
 
     useEffect(() => {
+        if (!auth || !auth.loggedIn) {
+            store.clearIDNamePairs();
+            history.push("/");
+        }
         if (store.authorMarkedForSearch) {
             store.search(store.authorMarkedForSearch)
             return;

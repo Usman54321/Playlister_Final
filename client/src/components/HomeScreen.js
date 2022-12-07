@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
@@ -10,7 +10,8 @@ import PlayerAndCommentWrapper from './PlayerAndCommentWrapper.js'
 import MUIEditSongModal from "./MUIEditSongModal"
 import MUIRemoveSongModal from "./MUIRemoveSongModal"
 import AuthContext from '../auth';
-import { useState } from 'react';
+
+import { useHistory } from 'react-router-dom';
 
 /*
     This React component lists all the top5 lists in the UI.
@@ -22,8 +23,13 @@ const HomeScreen = () => {
     const { auth } = useContext(AuthContext);
     const [idNamePairs, setIdNamePairs] = useState([])
     const [firstLoad, setFirstLoad] = useState(true)
+    const history = useHistory();
 
     useEffect(() => {
+        if (!auth || !auth.loggedIn) {
+            store.clearIDNamePairs();
+            history.push("/");
+        }
         if (firstLoad) {
             store.loadIdNamePairs();
             setFirstLoad(false)
@@ -33,7 +39,7 @@ const HomeScreen = () => {
     }, [store.idNamePairs]);
 
     let listCard = "";
-    if (store && store.idNamePairs.length > 0) {
+    if (idNamePairs && idNamePairs.length > 0) {
         listCard =
             <List
                 sx={{
@@ -42,7 +48,7 @@ const HomeScreen = () => {
                     borderRadius: "10px",
                 }}>
                 {
-                    store.idNamePairs.map((pair) => (
+                    idNamePairs.map((pair) => (
                         <ListCard
                             key={pair._id}
                             idNamePair={pair}
