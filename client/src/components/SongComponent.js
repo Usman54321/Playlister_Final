@@ -61,15 +61,16 @@ export default function SongComponent(props) {
                         sx={{
                             display: "flex",
                             flexDirection: "row",
-                            backgroundColor: "#b1bfca",
+                            backgroundColor: store && store.currentPlayingIndex === index ? "#f9fbe7" : "#b1bfca",
                             borderRadius: "10px",
                             mb: "10px",
                         }}
                     >
                         {index + 1}. {song.title} by {song.artist}
                     </ListItem>
-                ))}
-            </List>
+                ))
+                }
+            </List >
         );
     }
 }

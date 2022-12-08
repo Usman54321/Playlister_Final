@@ -32,24 +32,10 @@ function ListCard(props) {
     const [expanded, setExpanded] = useState(false);
     const [likes, setLikes] = useState([]);
     const [dislikes, setDislikes] = useState([]);
-    // const [isLoading, setLoading] = useState(true);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
     const [modalView, setModalView] = useState(false);
 
-    // async function updateLikesAndDislikes() {
-    //     if (idNamePair.published !== "None") {
-    //         store.getPublicPlaylistByID(idNamePair._id).then(
-    //             (playlist) => {
-    //                 // console.log("playlist: ", JSON.stringify(playlist, null, 3));
-    //                 setLikes(playlist.likes)
-    //                 setDislikes(playlist.dislikes)
-    //             }
-    //         )
-    //         // setLikes(idNamePair.likes)
-    //         // setDislikes(idNamePair.dislikes)
-    //     }
-    // }
 
     let updateLikesAndDislikes = () => {
         console.log("idNamePair with id " + idNamePair._id + " has likes: " + idNamePair.likes + " and dislikes: " + idNamePair.dislikes);
@@ -59,18 +45,14 @@ function ListCard(props) {
 
     useEffect(() => {
         if (idNamePair.published !== "None") {
-            // console.log("loading likes and dislikes");
             updateLikesAndDislikes();
-            // setLoading(false);
         }
-        // }, [idNamePair.likes, idNamePair.dislikes, idNamePair.published]);
     }, [store.idNamePairs]);
 
     let isCurrentList = false
     if (store && store.currentList)
         isCurrentList = store.currentList._id === idNamePair._id;
     else if (store && store.currentList && expanded) {
-        // console.log("Our list is not the current list but we are expanded");
         setExpanded(false);
     }
 
@@ -122,7 +104,7 @@ function ListCard(props) {
             console.log("load " + event.target.id);
 
             if (idNamePair.published === "None")
-                store.setPlayingList(id);
+                store.setPlayingList(id, 0);
             else if (id === store.currentPlayingList)
                 return;
             else {
@@ -387,6 +369,7 @@ function ListCard(props) {
                                 key={'playlist-song-' + (index)}
                                 index={index}
                                 song={song}
+                                playlistID={idNamePair._id}
                             />
                         ))
                     }

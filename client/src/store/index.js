@@ -37,6 +37,7 @@ export const GlobalStoreActionType = {
     ADD_VIEW: "ADD_VIEW",
     DUPLICATE_LIST: "DUPLICATE_LIST",
     MARK_AUTHOR_FOR_SEARCH: "MARK_AUTHOR_FOR_SEARCH",
+    SET_PLAYING_INDEX: "SET_PLAYING_INDEX",
 }
 
 
@@ -85,6 +86,7 @@ function GlobalStoreContextProvider(props) {
         listMarkedForDeletion: null,
         currentPlayingList: null,
         authorMarkedForSearch: null,
+        currentPlayingIndex: -1,
     });
     const history = useHistory();
 
@@ -124,6 +126,7 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentPlayingList: store.currentPlayingList,
                     authorMarkedForSearch: store.authorMarkedForSearch,
+                    currentPlayingIndex: store.currentPlayingIndex,
                 });
             }
             // STOP EDITING THE CURRENT LIST
@@ -142,6 +145,7 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentPlayingList: store.currentPlayingList,
                     authorMarkedForSearch: store.authorMarkedForSearch,
+                    currentPlayingIndex: store.currentPlayingIndex,
                 })
             }
             // CREATE A NEW LIST
@@ -160,6 +164,7 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentPlayingList: store.currentPlayingList,
                     authorMarkedForSearch: store.authorMarkedForSearch,
+                    currentPlayingIndex: store.currentPlayingIndex,
                 })
             }
             // GET ALL THE LISTS SO WE CAN PRESENT THEM
@@ -178,6 +183,7 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentPlayingList: store.currentPlayingList,
                     authorMarkedForSearch: store.authorMarkedForSearch,
+                    currentPlayingIndex: store.currentPlayingIndex,
                 });
             }
             // PREPARE TO DELETE A LIST
@@ -196,6 +202,7 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: store.currentList,
                     currentPlayingList: store.currentPlayingList,
                     authorMarkedForSearch: store.authorMarkedForSearch,
+                    currentPlayingIndex: store.currentPlayingIndex,
                 });
             }
             // UPDATE A LIST
@@ -214,6 +221,7 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentPlayingList: store.currentPlayingList,
                     authorMarkedForSearch: store.authorMarkedForSearch,
+                    currentPlayingIndex: store.currentPlayingIndex,
                 });
             }
             // START EDITING A LIST NAME
@@ -232,6 +240,7 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentPlayingList: store.currentPlayingList,
                     authorMarkedForSearch: store.authorMarkedForSearch,
+                    currentPlayingIndex: store.currentPlayingIndex,
                 });
             }
             // START EDITING A SONG
@@ -250,6 +259,7 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentPlayingList: store.currentPlayingList,
                     authorMarkedForSearch: store.authorMarkedForSearch,
+                    currentPlayingIndex: store.currentPlayingIndex,
                 });
             }
             // START REMOVING A SONG
@@ -268,6 +278,7 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentPlayingList: store.currentPlayingList,
                     authorMarkedForSearch: store.authorMarkedForSearch,
+                    currentPlayingIndex: store.currentPlayingIndex,
                 });
             }
             // HIDE MODALS
@@ -286,6 +297,7 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentPlayingList: store.currentPlayingList,
                     authorMarkedForSearch: store.authorMarkedForSearch,
+                    currentPlayingIndex: store.currentPlayingIndex,
                 });
             }
             // SET THE CURRENT PAGE
@@ -304,6 +316,7 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentPlayingList: null,
                     authorMarkedForSearch: store.authorMarkedForSearch,
+                    currentPlayingIndex: store.currentPlayingIndex,
                 });
             }
 
@@ -322,6 +335,7 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentPlayingList: store.currentPlayingList,
                     authorMarkedForSearch: store.authorMarkedForSearch,
+                    currentPlayingIndex: store.currentPlayingIndex,
                 });
             }
 
@@ -338,8 +352,9 @@ function GlobalStoreContextProvider(props) {
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
-                    currentPlayingList: payload,
+                    currentPlayingList: payload.playlistID,
                     authorMarkedForSearch: store.authorMarkedForSearch,
+                    currentPlayingIndex: payload.songIndex,
                 });
             }
 
@@ -358,6 +373,7 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentPlayingList: payload.id,
                     authorMarkedForSearch: store.authorMarkedForSearch,
+                    currentPlayingIndex: store.currentPlayingIndex,
                 });
             }
 
@@ -376,6 +392,7 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentPlayingList: store.currentPlayingList,
                     authorMarkedForSearch: store.authorMarkedForSearch,
+                    currentPlayingIndex: store.currentPlayingIndex,
                 });
             }
 
@@ -394,6 +411,26 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     currentPlayingList: store.currentPlayingList,
                     authorMarkedForSearch: payload,
+                    currentPlayingIndex: store.currentPlayingIndex,
+                });
+            }
+
+            case GlobalStoreActionType.SET_PLAYING_INDEX: {
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    currentPage: store.currentPage,
+                    currentSort: store.currentSort,
+                    idNamePairs: store.idNamePairs,
+                    currentList: store.currentList,
+                    currentSongIndex: store.currentSongIndex,
+                    currentSong: store.currentSong,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    currentPlayingList: store.currentPlayingList,
+                    authorMarkedForSearch: store.authorMarkedForSearch,
+                    currentPlayingIndex: payload,
                 });
             }
 
@@ -1334,14 +1371,17 @@ function GlobalStoreContextProvider(props) {
         });
     }
 
-    store.setPlayingList = (id) => {
+    store.setPlayingList = (playlistID, songIndex) => {
         // let list = store.idNamePairs.find((list) => {
         //     return list._id === id;
         // });
-        console.log("Setting list with ID: " + id + " as playing list");
+        console.log("Setting list with ID: " + playlistID + " as playing list");
         storeReducer({
             type: GlobalStoreActionType.SET_PLAYING_LIST,
-            payload: id
+            payload: {
+                playlistID: playlistID,
+                songIndex: songIndex
+            }
         });
     }
 

@@ -12,7 +12,7 @@ import GlobalStoreContext from '../store';
 export default function PlayerAndCommentWrapper() {
     const { store } = useContext(GlobalStoreContext);
     const [currentView, setCurrentView] = useState("player");
-    const [currentIndex, setCurrentIndex] = useState(0);
+    // const [currentIndex, setCurrentIndex] = useState(0);
     const [YT, setYTPlayer] = useState(null);
     const [list, setList] = useState(null);
 
@@ -30,22 +30,22 @@ export default function PlayerAndCommentWrapper() {
             console.log("List with id: ", store.currentPlayingList, " exists: ", doesThisListExist)
 
             if (!doesThisListExist) {
-                store.setPlayingList(null);
+                store.setPlayingList(null, 0);
                 setList(null);
                 return;
             }
 
-            let hasListChanged = false;
-            if (list && store.currentPlayingList !== list._id) {
-                hasListChanged = true;
-            }
+            // let hasListChanged = false;
+            // if (list && store.currentPlayingList !== list._id) {
+            //     hasListChanged = true;
+            // }
 
             store.getPlaylistById(store.currentPlayingList).then(
                 (playlist) => {
                     console.log("Playlist: ", playlist)
                     setList(playlist);
-                    if (hasListChanged)
-                        setCurrentIndex(0);
+                    // if (hasListChanged)
+                    // store.setPlayingList(store.currentPlayingList, 0);
                 }
             )
         }
@@ -62,21 +62,21 @@ export default function PlayerAndCommentWrapper() {
             console.log("List with id: ", store.currentPlayingList, " exists: ", doesThisListExist)
 
             if (!doesThisListExist) {
-                store.setPlayingList(null);
+                store.setPlayingList(null, 0);
                 setList(null);
                 return;
             }
 
-            let hasListChanged = false;
-            if (list && store.currentPlayingList !== list._id) {
-                hasListChanged = true;
-            }
+            // let hasListChanged = false;
+            // if (list && store.currentPlayingList !== list._id) {
+            //     hasListChanged = true;
+            // }
             store.getPublicPlaylistByID(store.currentPlayingList).then(
                 (playlist) => {
                     console.log("Playlist: ", playlist)
                     setList(playlist);
-                    if (hasListChanged)
-                        setCurrentIndex(0);
+                    // if (hasListChanged)
+                    //     store.setCurrentPlayingIndex(0);
                 }
             )
         }
@@ -95,8 +95,8 @@ export default function PlayerAndCommentWrapper() {
         // If the video has ended, play the next video
         if (event.data === 0) {
             console.log("Video has ended");
-            if (currentIndex < songs.length - 1) {
-                setCurrentIndex(currentIndex + 1);
+            if (store.currentPlayingIndex < songs.length - 1) {
+                store.setPlayingList(store.currentPlayingList, store.currentPlayingIndex + 1);
                 // YT.playVideo();
             }
         }
@@ -117,12 +117,12 @@ export default function PlayerAndCommentWrapper() {
 
     let playerBody;
     let songs = list && list.songs && list.songs.length > 0 ? list.songs : null;
-    let currentSong = songs ? songs[currentIndex] : null;
+    let currentSong = songs ? songs[store.currentPlayingIndex] : null;
     let currentYTID;
     let playlistName = "";
     let songTitle = "";
     let songArtist = "";
-    let index = currentIndex + 1;
+    let index = store.currentPlayingIndex + 1;
 
     if (!songs && !currentSong) {
         // console.log("No songs in playlist");
@@ -131,7 +131,7 @@ export default function PlayerAndCommentWrapper() {
     }
     else if (songs && !currentSong) {
         // You try to find a current song by resetting the index to 0
-        setCurrentIndex(0);
+        store.setPlayingList(store.currentPlayingList, 0);
     }
     else {
         currentYTID = currentSong.youTubeId;
@@ -174,16 +174,13 @@ export default function PlayerAndCommentWrapper() {
     let commentBodyDisplay = currentView === "comment" ? "flex" : "none";
 
     let rewindDisabled = false;
-    if (currentIndex === 0) {
-        rewindDisabled = true;
-    }
-    else if (!songs) {
+    if (store.currentPlayingIndex === 0 || !songs) {
         rewindDisabled = true;
     }
 
     let forwardDisabled = false;
     if (songs) {
-        if (currentIndex === songs.length - 1) {
+        if (store.currentPlayingIndex === songs.length - 1) {
             forwardDisabled = true;
         }
     }
@@ -254,8 +251,8 @@ export default function PlayerAndCommentWrapper() {
                     style={{ textDecration: 'none', color: 'black' }}
                     disabled={rewindDisabled}
                     onClick={() => {
-                        if (currentIndex > 0) {
-                            setCurrentIndex(currentIndex - 1);
+                        if (store.currentPlayingIndex > 0) {
+                            store.setPlayingList(store.currentPlayingList, store.currentPlayingIndex - 1);
                         }
                     }}
                 >
@@ -288,8 +285,8 @@ export default function PlayerAndCommentWrapper() {
                     style={{ textDecration: 'none', color: 'black' }}
                     disabled={forwardDisabled}
                     onClick={() => {
-                        if (currentIndex < songs.length - 1) {
-                            setCurrentIndex(currentIndex + 1);
+                        if (store.currentPlayingIndex < songs.length - 1) {
+                            store.setPlayingList(store.currentPlayingList, store.currentPlayingIndex + 1);
                         }
                     }}
                 >

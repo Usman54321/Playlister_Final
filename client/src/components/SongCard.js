@@ -4,7 +4,12 @@ import { GlobalStoreContext } from '../store'
 function SongCard(props) {
     const { store } = useContext(GlobalStoreContext);
     const [draggedTo, setDraggedTo] = useState(0);
-    const { song, index } = props;
+    const { song, index, playlistID } = props;
+
+    let bgColor = "";
+    if (playlistID === store.currentPlayingList && index === store.currentPlayingIndex) {
+        bgColor = "#f9fbe7";
+    }
 
     function handleDragStart(event) {
         event.dataTransfer.setData("song", index);
@@ -60,6 +65,7 @@ function SongCard(props) {
             onDrop={handleDrop}
             draggable="true"
             onClick={handleClick}
+            style={{ backgroundColor: bgColor }}
         >
             {index + 1}.
             <a
