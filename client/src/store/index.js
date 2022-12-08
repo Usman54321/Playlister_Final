@@ -102,7 +102,7 @@ function GlobalStoreContextProvider(props) {
         const { type, payload } = action;
         // console.log("Store: " + JSON.stringify(store, null, 3));
 
-        if (type === GlobalStoreActionType.LOAD_ID_NAME_PAIRS || type === GlobalStoreActionType.SET_CURRENT_LIST || type === GlobalStoreActionType.SET_SORT_TYPE || type === GlobalStoreActionType.ADD_VIEW) {
+        if (type === GlobalStoreActionType.LOAD_ID_NAME_PAIRS || type === GlobalStoreActionType.SET_CURRENT_LIST || type === GlobalStoreActionType.SET_SORT_TYPE || type === GlobalStoreActionType.ADD_VIEW || type === GlobalStoreActionType.DUPLICATE_LIST) {
             console.log("storeReducer: " + type + " " + JSON.stringify(payload, null, 3));
         }
         else

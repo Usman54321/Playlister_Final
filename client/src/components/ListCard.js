@@ -48,11 +48,11 @@ function ListCard(props) {
         if (idNamePair.published !== "None") {
             updateLikesAndDislikes();
         }
-        let currList = store && store.currentList && store.currentList._id === idNamePair._id
+        let currList = store && store.currentList && idNamePair._id && store.currentList._id === idNamePair._id
         setIsCurrentList(currList);
         if (!currList && expanded) {
-            console.log("Listcard has id " + idNamePair._id + " and current list has id " + store.currentList._id + ".")
-            console.log("Listcard " + idNamePair._id + " is not current list, so closing it.")
+            // console.log("Listcard has id " + idNamePair._id + " and current list has id " + store.currentList._id + ".")
+            // console.log("Listcard " + idNamePair._id + " is not current list, so closing it.")
             setExpanded(false);
         }
     }, [store.currentList, store.idNamePairs]);
