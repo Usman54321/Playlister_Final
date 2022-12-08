@@ -35,10 +35,11 @@ function ListCard(props) {
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
     const [modalView, setModalView] = useState(false);
+    const [isCurrentList, setIsCurrentList] = useState(false);
 
 
     let updateLikesAndDislikes = () => {
-        console.log("idNamePair with id " + idNamePair._id + " has likes: " + idNamePair.likes + " and dislikes: " + idNamePair.dislikes);
+        // console.log("idNamePair with id " + idNamePair._id + " has likes: " + idNamePair.likes + " and dislikes: " + idNamePair.dislikes);
         setLikes(idNamePair.likes)
         setDislikes(idNamePair.dislikes)
     }
@@ -47,46 +48,37 @@ function ListCard(props) {
         if (idNamePair.published !== "None") {
             updateLikesAndDislikes();
         }
-    }, [store.idNamePairs]);
-
-    let isCurrentList = false
-    if (store && store.currentList)
-        isCurrentList = store.currentList._id === idNamePair._id;
-    else if (store && store.currentList && expanded) {
-        setExpanded(false);
-    }
+        let currList = store && store.currentList && store.currentList._id === idNamePair._id
+        setIsCurrentList(currList);
+        if (!currList && expanded) {
+            console.log("Listcard has id " + idNamePair._id + " and current list has id " + store.currentList._id + ".")
+            console.log("Listcard " + idNamePair._id + " is not current list, so closing it.")
+            setExpanded(false);
+        }
+    }, [store.currentList, store.idNamePairs]);
 
     function handleExpansion(event) {
         event.stopPropagation();
 
-        if (store.currentPage === "HOME") {
-            store.setCurrentList(idNamePair._id);
-        }
-        else {
-            console.log(store.currentPage);
-            store.setCurrentListForCommunity(idNamePair._id);
+        if (!expanded) {
+            console.log("Listcard " + idNamePair._id + " is not expanded, so setting current list to it.")
+            if (store.currentPage === "HOME") {
+                store.setCurrentList(idNamePair._id);
+            }
+            else {
+                console.log(store.currentPage);
+                store.setCurrentListForCommunity(idNamePair._id);
+            }
         }
 
         if (expanded && isCurrentList) {
+            console.log("Listcard " + idNamePair._id + " is expanded and current list, so closing it.")
             event.stopPropagation();
             store.closeCurrentList();
         }
-        // event.stopPropagation();
-        console.log("Expanded Listcard " + idNamePair._id + " to " + !expanded);
 
-        let notExpanded = !expanded;
-        // We are expanding a published playlist and it is not already expanded
-        // if (notExpanded && idNamePair.published !== "None") {
-        //     store.viewPlaylist(idNamePair._id).then(
-        //         () => {
-        //             setExpanded(notExpanded);
-        //         }
-        //     )
-        //     console.log("We are expanding a published playlist");
-        //     console.log("Expanded is now set to: " + notExpanded);
-        // }
-        // else
-        setExpanded(notExpanded);
+        console.log("Expanded Listcard " + idNamePair._id + " to " + !expanded);
+        setExpanded(!expanded);
     }
 
     function handleLoadList(event, id) {
