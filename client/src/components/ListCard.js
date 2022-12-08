@@ -438,6 +438,7 @@ function ListCard(props) {
                             backgroundColor: "#e3f2fd",
                             mr: "1.5%"
                         }}
+                        disabled={store.isModalOpen()}
                     >
                         {'Undo'}
                     </Button>
@@ -448,6 +449,7 @@ function ListCard(props) {
                         sx={{
                             backgroundColor: "#e3f2fd",
                         }}
+                        disabled={store.isModalOpen()}
                     >
                         {'Redo'}
                     </Button>
@@ -466,6 +468,7 @@ function ListCard(props) {
                             backgroundColor: "#e3f2fd",
                             mr: "1.5%"
                         }}
+                        disabled={store.isModalOpen()}
                     >
                         {'Delete'}
                     </Button>
@@ -477,6 +480,7 @@ function ListCard(props) {
                             backgroundColor: "#e3f2fd",
                             mr: "1.5%"
                         }}
+                        disabled={store.isModalOpen()}
                     >
                         {'Publish'}
                     </Button>
@@ -487,6 +491,7 @@ function ListCard(props) {
                         sx={{
                             backgroundColor: "#e3f2fd",
                         }}
+                        disabled={store.isModalOpen()}
                     >
                         {'Duplicate'}
                     </Button>
