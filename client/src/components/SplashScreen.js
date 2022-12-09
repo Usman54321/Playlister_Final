@@ -7,7 +7,6 @@ export default function SplashScreen() {
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
 
-
     return (
         <div id="splash-screen">
             <Box

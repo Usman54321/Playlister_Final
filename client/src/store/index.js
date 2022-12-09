@@ -1091,7 +1091,7 @@ function GlobalStoreContextProvider(props) {
                     }
                     let sorted = store.sortHelper(modifiedIdNamePairs, store.currentSort);
                     storeReducer({
-                        type: GlobalStoreActionType.GlobalStoreActionType.ADD_VIEW,
+                        type: GlobalStoreActionType.ADD_VIEW,
                         payload: {
                             idNamePairs: sorted,
                             id: id,
